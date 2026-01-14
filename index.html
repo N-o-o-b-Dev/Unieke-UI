@@ -1,7 +1,9 @@
-<!DOCTYPE html>
 <html class="light" lang="en">
 
-<head>
+<head></head>
+
+<body
+    class="bg-background-warm font-body text-text-main overflow-hidden h-screen flex selection:bg-primary/20 selection:text-primary-dark">
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Service User Profile - CareManager</title>
@@ -47,7 +49,8 @@
     </script>
     <style>
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
+            height: 4px;
         }
 
         ::-webkit-scrollbar-track {
@@ -70,11 +73,37 @@
         summary {
             list-style: none;
         }
-    </style>
-</head>
 
-<body
-    class="bg-background-warm font-body text-text-main overflow-hidden h-screen flex selection:bg-primary/20 selection:text-primary-dark">
+        #tab-fluid:checked~div .label-fluid,
+        #tab-vitals:checked~div .label-vitals,
+        #tab-nutrition:checked~div .label-nutrition {
+            background-color: white;
+            color: #3b82f6;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+            border-color: #e0f2fe;
+        }
+
+        #tab-fluid:checked~.content-fluid,
+        #tab-vitals:checked~.content-vitals,
+        #tab-nutrition:checked~.content-nutrition {
+            display: block;
+            animation: fade-in 0.25s ease-out forwards;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+
     <!-- Mobile Backdrop -->
     <div id="sidebar-backdrop"
         class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity opacity-0"
@@ -393,7 +422,8 @@
                                 <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Note
                             </button>
                         </div>
-                        <div class="p-5 space-y-6">
+                        <div
+                            class="p-5 space-y-6 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
                             <div class="flex gap-4 group">
                                 <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 flex-shrink-0 ring-2 ring-blue-100 shadow-sm"
                                     data-alt="Avatar of nurse Sarah"
@@ -452,370 +482,784 @@
                             </div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <button
-                            class="bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32">
+                    <div class="flex flex-col gap-6">
+                        <div
+                            class="bg-surface-white rounded-2xl p-0 border border-blue-100 shadow-card overflow-hidden">
                             <div
-                                class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
-                                <span class="material-symbols-outlined">directions_walk</span>
+                                class="p-3 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
+                                <h3 class="text-text-main font-bold text-sm font-display">Medications</h3>
+                                <div
+                                    class="flex items-center bg-white rounded-lg border border-blue-200 shadow-sm p-0.5">
+                                    <button
+                                        class="w-6 h-6 flex items-center justify-center rounded hover:bg-blue-50 text-blue-400 hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">chevron_left</span>
+                                    </button>
+                                    <span
+                                        class="text-[10px] font-bold text-text-main px-2 cursor-pointer select-none">Today</span>
+                                    <button
+                                        class="w-6 h-6 flex items-center justify-center rounded hover:bg-blue-50 text-blue-400 hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="flex flex-col items-center justify-center">
-                                <span class="text-xs font-bold text-text-main group-hover:text-primary-dark">Walk</span>
-                                <span
-                                    class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Morning
-                                    Routine</span>
-                            </div>
-                        </button>
-                        <button
-                            class="bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32">
                             <div
-                                class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
-                                <span class="material-symbols-outlined">music_note</span>
+                                class="flex flex-col h-[28rem] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent bg-white relative">
+                                <div
+                                    class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-b border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="material-symbols-outlined text-amber-500 text-[16px]">wb_sunny</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Morning</span>
+                                    </div>
+                                    <span
+                                        class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">06:00
+                                        - 12:00</span>
+                                </div>
+                                <div
+                                    class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-primary-light/10 transition-colors cursor-pointer px-4">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-white group-hover:border-green-300 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-text-main text-sm font-bold">Paracetamol</p>
+                                            <p class="text-text-muted text-xs">1g • Oral</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span
+                                            class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">08:00</span>
+                                        <span
+                                            class="text-green-600 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Given</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-primary-light/10 transition-colors cursor-pointer px-4">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-white group-hover:border-green-300 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-text-main text-sm font-bold">Atorvastatin</p>
+                                            <p class="text-text-muted text-xs">20mg • Oral</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span
+                                            class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">08:00</span>
+                                        <span
+                                            class="text-green-600 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Given</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="material-symbols-outlined text-orange-500 text-[16px]">light_mode</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Afternoon</span>
+                                    </div>
+                                    <span
+                                        class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">12:00
+                                        - 16:00</span>
+                                </div>
+                                <div
+                                    class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-amber-50/30 transition-colors cursor-pointer px-4 bg-amber-50/10">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
+                                            <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-text-main text-sm font-bold">Metformin</p>
+                                            <p class="text-text-muted text-xs">500mg • With Lunch</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <button
+                                            class="w-7 h-7 rounded-md border border-red-200 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center transition-all shadow-sm">
+                                            <span class="material-symbols-outlined text-[16px]">close</span>
+                                        </button>
+                                        <button
+                                            class="w-7 h-7 rounded-md border border-green-200 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-500 flex items-center justify-center transition-all shadow-sm">
+                                            <span class="material-symbols-outlined text-[16px]">check</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="material-symbols-outlined text-indigo-400 text-[16px]">nights_stay</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Evening</span>
+                                    </div>
+                                    <span
+                                        class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">16:00
+                                        - 19:00</span>
+                                </div>
+                                <div
+                                    class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-red-50 transition-colors cursor-pointer px-4">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center border border-red-100 group-hover:bg-white group-hover:border-red-300 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[16px]">cancel</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-text-main text-sm font-bold">Amlodipine</p>
+                                            <p class="text-text-muted text-xs">10mg • Oral</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span
+                                            class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">17:00</span>
+                                        <span
+                                            class="text-red-500 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Refused</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="material-symbols-outlined text-slate-500 text-[16px]">bedtime</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Night</span>
+                                    </div>
+                                    <span
+                                        class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">19:00
+                                        - 23:59</span>
+                                </div>
+                                <div
+                                    class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-amber-50/30 transition-colors cursor-pointer px-4 bg-amber-50/10">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
+                                            <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-text-main text-sm font-bold">Donepezil</p>
+                                            <p class="text-text-muted text-xs">10mg • Bedtime</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <button
+                                            class="w-7 h-7 rounded-md border border-red-200 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center transition-all shadow-sm">
+                                            <span class="material-symbols-outlined text-[16px]">close</span>
+                                        </button>
+                                        <button
+                                            class="w-7 h-7 rounded-md border border-green-200 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-500 flex items-center justify-center transition-all shadow-sm">
+                                            <span class="material-symbols-outlined text-[16px]">check</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-blue-50 transition-colors cursor-pointer px-4">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-slate-50 text-slate-500 flex items-center justify-center border border-slate-200 group-hover:bg-white group-hover:border-primary/50 group-hover:text-primary transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[16px]">pill</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-text-main text-sm font-bold">Zopiclone</p>
+                                            <p class="text-text-muted text-xs">3.75mg • PRN</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span
+                                            class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded group-hover:bg-white border border-transparent group-hover:border-blue-100 transition-all">PRN</span>
+                                        <span class="text-text-muted text-[9px] mt-0.5 font-medium">As Needed</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="material-symbols-outlined text-indigo-800 text-[16px]">dark_mode</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Mid-night</span>
+                                    </div>
+                                    <span
+                                        class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">00:00
+                                        - 06:00</span>
+                                </div>
+                                <div class="p-8 text-center bg-slate-50/30">
+                                    <p class="text-xs text-text-muted font-medium italic">No scheduled medications</p>
+                                </div>
                             </div>
-                            <div class="flex flex-col items-center justify-center">
-                                <span
-                                    class="text-xs font-bold text-text-main group-hover:text-primary-dark">Music</span>
-                                <span
-                                    class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Selection:<br />Classical</span>
+                            <div class="p-2 border-t border-blue-50 bg-slate-50 flex items-center justify-center">
+                                <button
+                                    class="w-full text-[10px] text-text-muted font-bold uppercase tracking-widest hover:text-primary transition-colors text-center py-1.5">
+                                    View Full History
+                                </button>
                             </div>
-                        </button>
-                        <button
-                            class="bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32">
+                        </div>
+                        <div class="bg-surface-white rounded-2xl border border-blue-100 shadow-card overflow-hidden">
                             <div
-                                class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
-                                <span class="material-symbols-outlined">menu_book</span>
+                                class="p-4 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
+                                <h3 class="text-text-main font-semibold text-sm font-display">Schedule</h3>
+                                <button
+                                    class="flex items-center gap-1.5 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                    <span class="material-symbols-outlined text-[16px]">add</span> Add
+                                </button>
                             </div>
-                            <div class="flex flex-col items-center justify-center">
-                                <span class="text-xs font-bold text-text-main group-hover:text-primary-dark">Read</span>
-                                <span
-                                    class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Book:<br />Gatsby</span>
-                            </div>
-                        </button>
-                        <button
-                            class="bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32">
                             <div
-                                class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
-                                <span class="material-symbols-outlined">accessibility_new</span>
+                                class="p-5 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+                                <div class="relative pl-2">
+                                    <div class="absolute left-[7px] top-2 bottom-2 w-0.5 bg-blue-100"></div>
+                                    <div class="relative flex gap-4 mb-6 opacity-60 grayscale">
+                                        <div
+                                            class="w-4 h-4 rounded-full bg-slate-200 border-2 border-white z-10 shrink-0 mt-0.5">
+                                        </div>
+                                        <div>
+                                            <p class="text-text-muted text-xs mb-0.5">09:00 AM</p>
+                                            <p class="text-text-secondary text-sm font-medium line-through">Breakfast
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex gap-4 mb-6">
+                                        <div
+                                            class="w-4 h-4 rounded-full bg-primary border-2 border-white ring-4 ring-blue-50 z-10 shrink-0 mt-0.5 shadow-md">
+                                        </div>
+                                        <div
+                                            class="bg-gradient-to-r from-primary-light to-white border border-blue-100 p-3 -m-2 rounded-xl w-full shadow-sm">
+                                            <div class="flex justify-between items-start">
+                                                <p class="text-primary-dark text-xs mb-0.5 font-bold">10:00 AM</p>
+                                                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                                            </div>
+                                            <p class="text-text-main text-sm font-bold">Physiotherapy Session</p>
+                                            <p class="text-text-secondary text-xs mt-1 flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">location_on</span>
+                                                Gym
+                                                Room A
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex gap-4 mb-6">
+                                        <div
+                                            class="w-4 h-4 rounded-full bg-white border-2 border-slate-300 z-10 shrink-0 mt-0.5">
+                                        </div>
+                                        <div>
+                                            <p class="text-text-muted text-xs mb-0.5">12:30 PM</p>
+                                            <p class="text-text-main text-sm font-medium">Lunch</p>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex gap-4">
+                                        <div
+                                            class="w-4 h-4 rounded-full bg-white border-2 border-slate-300 z-10 shrink-0 mt-0.5">
+                                        </div>
+                                        <div>
+                                            <p class="text-text-muted text-xs mb-0.5">03:00 PM</p>
+                                            <p class="text-text-main text-sm font-medium">Family Visit (Daughter)</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex flex-col items-center justify-center">
-                                <span
-                                    class="text-xs font-bold text-text-main group-hover:text-primary-dark">Physio</span>
-                                <span
-                                    class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Exercises:<br />Leg
-                                    Lifts</span>
+                        </div>
+                        <div class="bg-surface-white rounded-2xl border border-blue-100 shadow-card overflow-hidden">
+                            <div
+                                class="p-4 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
+                                <h3 class="text-text-main font-semibold text-sm font-display">To-Do List</h3>
+                                <button
+                                    class="flex items-center gap-1 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-2 py-1 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                    <span class="material-symbols-outlined text-[16px]">add</span>
+                                    Add Task
+                                </button>
                             </div>
-                        </button>
+                            <div
+                                class="p-5 space-y-3 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+                                <label
+                                    class="flex items-start gap-3 cursor-pointer group p-2 hover:bg-blue-50/50 rounded-lg -mx-2 transition-colors border border-transparent hover:border-blue-100/50">
+                                    <input checked=""
+                                        class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 bg-white"
+                                        type="checkbox" />
+                                    <span
+                                        class="text-text-muted text-sm line-through group-hover:text-text-secondary transition-colors decoration-slate-400">Check
+                                        fluid intake logs</span>
+                                </label>
+                                <label
+                                    class="flex items-start gap-3 cursor-pointer group p-2 hover:bg-blue-50/50 rounded-lg -mx-2 transition-colors border border-transparent hover:border-blue-100/50">
+                                    <input
+                                        class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 bg-white"
+                                        type="checkbox" />
+                                    <span
+                                        class="text-text-main text-sm group-hover:text-primary transition-colors font-medium">Update
+                                        risk assessment</span>
+                                </label>
+                                <label
+                                    class="flex items-start gap-3 cursor-pointer group p-2 hover:bg-blue-50/50 rounded-lg -mx-2 transition-colors border border-transparent hover:border-blue-100/50">
+                                    <input
+                                        class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 bg-white"
+                                        type="checkbox" />
+                                    <span
+                                        class="text-text-main text-sm group-hover:text-primary transition-colors font-medium">Call
+                                        Pharmacy regarding refill</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="lg:col-span-3 flex flex-col gap-6">
-                    <div class="bg-surface-white rounded-2xl p-0 border border-blue-100 shadow-card overflow-hidden">
-                        <div class="p-3 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
-                            <h3 class="text-text-main font-bold text-sm font-display">Medications</h3>
-                            <div class="flex items-center bg-white rounded-lg border border-blue-200 shadow-sm p-0.5">
+                    <div
+                        class="bg-surface-white rounded-2xl border border-blue-100 shadow-soft flex flex-col relative overflow-hidden min-h-[500px]">
+                        <input checked="" class="hidden" id="tab-fluid" name="health_tabs" type="radio" />
+                        <input class="hidden" id="tab-vitals" name="health_tabs" type="radio" />
+                        <input class="hidden" id="tab-nutrition" name="health_tabs" type="radio" />
+                        <div
+                            class="px-4 py-4 border-b border-blue-50 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gradient-to-r from-white to-primary-light/30">
+                            <h3 class="text-lg font-bold text-text-main font-display flex items-center gap-2">
+                                <span class="w-1.5 h-6 bg-primary rounded-full"></span> Health Logs
+                            </h3>
+                            <div class="flex p-1 bg-slate-100 rounded-lg border border-slate-200">
+                                <label
+                                    class="label-fluid px-4 py-1.5 text-xs font-bold uppercase tracking-wide rounded-md cursor-pointer transition-all text-text-muted hover:text-text-secondary select-none border border-transparent"
+                                    for="tab-fluid">
+                                    Fluid Balance
+                                </label>
+                                <label
+                                    class="label-vitals px-4 py-1.5 text-xs font-bold uppercase tracking-wide rounded-md cursor-pointer transition-all text-text-muted hover:text-text-secondary select-none border border-transparent"
+                                    for="tab-vitals">
+                                    Latest Vitals
+                                </label>
+                                <label
+                                    class="label-nutrition px-4 py-1.5 text-xs font-bold uppercase tracking-wide rounded-md cursor-pointer transition-all text-text-muted hover:text-text-secondary select-none border border-transparent"
+                                    for="tab-nutrition">
+                                    Nutrition Log
+                                </label>
+                            </div>
+                        </div>
+                        <div class="content-fluid hidden p-5 flex-1 animate-in fade-in slide-in-from-bottom-2">
+                            <div class="flex justify-between items-center mb-6">
+                                <div class="text-sm font-medium text-text-muted">Tracking hydration levels for today
+                                </div>
                                 <button
-                                    class="w-6 h-6 flex items-center justify-center rounded hover:bg-blue-50 text-blue-400 hover:text-primary transition-colors">
-                                    <span class="material-symbols-outlined text-[16px]">chevron_left</span>
-                                </button>
-                                <span
-                                    class="text-[10px] font-bold text-text-main px-2 cursor-pointer select-none">Today</span>
-                                <button
-                                    class="w-6 h-6 flex items-center justify-center rounded hover:bg-blue-50 text-blue-400 hover:text-primary transition-colors">
-                                    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                                    class="flex items-center gap-1.5 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                    <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Entry
                                 </button>
                             </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                                <div
+                                    class="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-sm group hover:border-blue-200 transition-all">
+                                    <span class="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">Total
+                                        Intake</span>
+                                    <span class="text-2xl font-bold text-text-main font-display">1,850 ml</span>
+                                    <span class="text-[10px] text-text-muted mt-0.5">Target: 2,000 ml</span>
+                                </div>
+                                <div
+                                    class="bg-slate-50 border border-slate-100 rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-sm group hover:border-slate-200 transition-all">
+                                    <span
+                                        class="text-[10px] font-bold text-text-secondary uppercase tracking-wider mb-1">Total
+                                        Output</span>
+                                    <span class="text-2xl font-bold text-text-main font-display">1,200 ml</span>
+                                    <span class="text-[10px] text-text-muted mt-0.5">Last: 1 hour ago</span>
+                                </div>
+                                <div
+                                    class="bg-green-50/50 border border-green-100 rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-sm group hover:border-green-200 transition-all">
+                                    <span class="text-[10px] font-bold text-green-600 uppercase tracking-wider mb-1">Net
+                                        Balance</span>
+                                    <span class="text-2xl font-bold text-green-700 font-display">+650 ml</span>
+                                    <span class="text-[10px] text-green-600/70 mt-0.5 font-medium">Positive</span>
+                                </div>
+                            </div>
+                            <h4 class="text-xs font-bold text-text-muted uppercase tracking-wider mb-3 pl-1">Recent
+                                Activity</h4>
+                            <div
+                                class="space-y-3 max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center border border-blue-100 group-hover:bg-blue-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">water_drop</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Water</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                14:30 PM
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span class="text-sm font-bold text-text-main">250 ml</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 mt-0.5">Intake</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 group-hover:bg-amber-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">local_cafe</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Tea (Black)</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                10:15 AM
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span class="text-sm font-bold text-text-main">300 ml</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 mt-0.5">Intake</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-slate-50 text-slate-500 flex items-center justify-center border border-slate-100 group-hover:bg-slate-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">opacity</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Urine Output</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                08:00 AM
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span class="text-sm font-bold text-text-main">450 ml</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-wider text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded border border-orange-100 mt-0.5">Output</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-vitals hidden p-5 flex-1 animate-in fade-in slide-in-from-bottom-2">
+                            <div class="flex justify-between items-center mb-6">
+                                <div class="text-sm font-medium text-text-muted">Latest recorded vital signs</div>
+                                <button
+                                    class="flex items-center gap-1.5 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                    <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Vitals
+                                </button>
+                            </div>
+                            <div
+                                class="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+                                <div
+                                    class="w-40 flex-shrink-0 bg-white border border-blue-100 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-primary/30 hover:shadow-md transition-all group h-full snap-start">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 group-hover:bg-primary group-hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                        </div>
+                                        <span
+                                            class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-600 border border-green-100">Normal</span>
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">Blood
+                                            Pressure</span>
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="text-xl font-bold text-text-main font-display">120/80</span>
+                                            <span class="text-xs text-text-muted font-medium">mmHg</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-text-muted font-medium">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                            <span>24 Oct, 09:15</span>
+                                        </div>
+                                        <button
+                                            class="text-text-muted hover:text-primary transition-colors p-1 -mr-1 rounded-full hover:bg-blue-50">
+                                            <span class="material-symbols-outlined text-[14px]">edit</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="w-40 flex-shrink-0 bg-white border border-blue-100 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-primary/30 hover:shadow-md transition-all group h-full snap-start">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center border border-rose-100 group-hover:bg-rose-500 group-hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">ecg_heart</span>
+                                        </div>
+                                        <span
+                                            class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-600 border border-green-100">Normal</span>
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">Heart
+                                            Rate</span>
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="text-xl font-bold text-text-main font-display">72</span>
+                                            <span class="text-xs text-text-muted font-medium">bpm</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-text-muted font-medium">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                            <span>24 Oct, 09:15</span>
+                                        </div>
+                                        <button
+                                            class="text-text-muted hover:text-primary transition-colors p-1 -mr-1 rounded-full hover:bg-blue-50">
+                                            <span class="material-symbols-outlined text-[14px]">edit</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="w-40 flex-shrink-0 bg-white border border-blue-100 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-primary/30 hover:shadow-md transition-all group h-full snap-start">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-cyan-50 text-cyan-600 flex items-center justify-center border border-cyan-100 group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">air</span>
+                                        </div>
+                                        <span
+                                            class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-600 border border-green-100">Normal</span>
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">Oxygen
+                                            Sat</span>
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="text-xl font-bold text-text-main font-display">98</span>
+                                            <span class="text-xs text-text-muted font-medium">%</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-text-muted font-medium">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                            <span>24 Oct, 09:15</span>
+                                        </div>
+                                        <button
+                                            class="text-text-muted hover:text-primary transition-colors p-1 -mr-1 rounded-full hover:bg-blue-50">
+                                            <span class="material-symbols-outlined text-[14px]">edit</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="w-40 flex-shrink-0 bg-white border border-blue-100 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-primary/30 hover:shadow-md transition-all group h-full snap-start">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center border border-orange-100 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">thermostat</span>
+                                        </div>
+                                        <span
+                                            class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100">Elevated</span>
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">Temperature</span>
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="text-xl font-bold text-text-main font-display">38.2</span>
+                                            <span class="text-xs text-text-muted font-medium">°C</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-text-muted font-medium">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                            <span>24 Oct, 08:30</span>
+                                        </div>
+                                        <button
+                                            class="text-text-muted hover:text-primary transition-colors p-1 -mr-1 rounded-full hover:bg-blue-50">
+                                            <span class="material-symbols-outlined text-[14px]">edit</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="w-40 flex-shrink-0 bg-white border border-blue-100 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-primary/30 hover:shadow-md transition-all group h-full snap-start">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center border border-purple-100 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">water_drop</span>
+                                        </div>
+                                        <span
+                                            class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-red-50 text-red-600 border border-red-100">Danger</span>
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">Glucose</span>
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="text-xl font-bold text-text-main font-display">16.5</span>
+                                            <span class="text-xs text-text-muted font-medium">mmol/L</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-text-muted font-medium">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                            <span>24 Oct, 07:00</span>
+                                        </div>
+                                        <button
+                                            class="text-text-muted hover:text-primary transition-colors p-1 -mr-1 rounded-full hover:bg-blue-50">
+                                            <span class="material-symbols-outlined text-[14px]">edit</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-nutrition hidden p-5 flex-1 animate-in fade-in slide-in-from-bottom-2">
+                            <div class="flex justify-between items-center mb-6">
+                                <div class="text-sm font-medium text-text-muted">Daily dietary intake and monitoring
+                                </div>
+                                <button
+                                    class="flex items-center gap-1.5 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                    <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Entry
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                                <div
+                                    class="bg-orange-50/50 border border-orange-100 rounded-xl p-4 flex flex-col justify-center shadow-sm hover:border-orange-200 transition-all">
+                                    <span
+                                        class="text-[10px] font-bold text-orange-600 uppercase tracking-wider mb-1">Daily
+                                        Calories</span>
+                                    <span class="text-2xl font-bold text-text-main font-display">1,450 kcal</span>
+                                    <div class="w-full bg-orange-100 rounded-full h-1.5 mt-2">
+                                        <div class="bg-orange-500 h-1.5 rounded-full" style="width: 72%"></div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-green-50/50 border border-green-100 rounded-xl p-4 flex flex-col justify-center shadow-sm hover:border-green-200 transition-all">
+                                    <span
+                                        class="text-[10px] font-bold text-green-600 uppercase tracking-wider mb-1">Last
+                                        Meal</span>
+                                    <span class="text-lg font-bold text-text-main font-display">12:45 PM</span>
+                                    <span class="text-[10px] text-text-muted mt-0.5">Lunch - Consumed</span>
+                                </div>
+                            </div>
+                            <h4 class="text-xs font-bold text-text-muted uppercase tracking-wider mb-3 pl-1">Recent
+                                Intake</h4>
+                            <div
+                                class="space-y-3 max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center border border-orange-100 group-hover:bg-orange-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">restaurant</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Chicken Roast</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                12:45 • Main Meal
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span
+                                            class="text-xs font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full">100%
+                                            Eaten</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 group-hover:bg-blue-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">icecream</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Fruit Yogurt</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                10:30 • Snack
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span
+                                            class="text-xs font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full">Consumed</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-slate-50 text-slate-500 flex items-center justify-center border border-slate-100 group-hover:bg-slate-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">breakfast_dining</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Porridge &amp; Toast</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                08:00 • Texture-mod
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span
+                                            class="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">80%
+                                            Eaten</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-surface-white rounded-2xl border border-blue-100 shadow-card overflow-hidden">
+                        <div class="p-4 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
+                            <h3 class="text-text-main font-semibold text-sm font-display">Activities</h3>
                         </div>
                         <div
-                            class="flex flex-col h-[28rem] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent bg-white relative">
-                            <div
-                                class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-b border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-amber-500 text-[16px]">wb_sunny</span>
-                                    <span
-                                        class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Morning</span>
-                                </div>
-                                <span
-                                    class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">06:00
-                                    - 12:00</span>
-                            </div>
-                            <div
-                                class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-primary-light/10 transition-colors cursor-pointer px-4">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-white group-hover:border-green-300 transition-colors shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                                    </div>
-                                    <div>
-                                        <p class="text-text-main text-sm font-bold">Paracetamol</p>
-                                        <p class="text-text-muted text-xs">1g • Oral</p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col items-end">
-                                    <span
-                                        class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">08:00</span>
-                                    <span
-                                        class="text-green-600 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Given</span>
-                                </div>
-                            </div>
-                            <div
-                                class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-primary-light/10 transition-colors cursor-pointer px-4">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-white group-hover:border-green-300 transition-colors shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                                    </div>
-                                    <div>
-                                        <p class="text-text-main text-sm font-bold">Atorvastatin</p>
-                                        <p class="text-text-muted text-xs">20mg • Oral</p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col items-end">
-                                    <span
-                                        class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">08:00</span>
-                                    <span
-                                        class="text-green-600 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Given</span>
-                                </div>
-                            </div>
-                            <div
-                                class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
-                                <div class="flex items-center gap-2">
-                                    <span
-                                        class="material-symbols-outlined text-orange-500 text-[16px]">light_mode</span>
-                                    <span
-                                        class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Afternoon</span>
-                                </div>
-                                <span
-                                    class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">12:00
-                                    - 16:00</span>
-                            </div>
-                            <div
-                                class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-amber-50/30 transition-colors cursor-pointer px-4 bg-amber-50/10">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
-                                    </div>
-                                    <div>
-                                        <p class="text-text-main text-sm font-bold">Metformin</p>
-                                        <p class="text-text-muted text-xs">500mg • With Lunch</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-1.5">
-                                    <button
-                                        class="w-7 h-7 rounded-md border border-red-200 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center transition-all shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">close</span>
-                                    </button>
-                                    <button
-                                        class="w-7 h-7 rounded-md border border-green-200 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-500 flex items-center justify-center transition-all shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">check</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div
-                                class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
-                                <div class="flex items-center gap-2">
-                                    <span
-                                        class="material-symbols-outlined text-indigo-400 text-[16px]">nights_stay</span>
-                                    <span
-                                        class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Evening</span>
-                                </div>
-                                <span
-                                    class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">16:00
-                                    - 19:00</span>
-                            </div>
-                            <div
-                                class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-red-50 transition-colors cursor-pointer px-4">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center border border-red-100 group-hover:bg-white group-hover:border-red-300 transition-colors shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">cancel</span>
-                                    </div>
-                                    <div>
-                                        <p class="text-text-main text-sm font-bold">Amlodipine</p>
-                                        <p class="text-text-muted text-xs">10mg • Oral</p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col items-end">
-                                    <span
-                                        class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">17:00</span>
-                                    <span
-                                        class="text-red-500 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Refused</span>
-                                </div>
-                            </div>
-                            <div
-                                class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-slate-500 text-[16px]">bedtime</span>
-                                    <span
-                                        class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Night</span>
-                                </div>
-                                <span
-                                    class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">19:00
-                                    - 23:59</span>
-                            </div>
-                            <div
-                                class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-amber-50/30 transition-colors cursor-pointer px-4 bg-amber-50/10">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
-                                    </div>
-                                    <div>
-                                        <p class="text-text-main text-sm font-bold">Donepezil</p>
-                                        <p class="text-text-muted text-xs">10mg • Bedtime</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-1.5">
-                                    <button
-                                        class="w-7 h-7 rounded-md border border-red-200 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center transition-all shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">close</span>
-                                    </button>
-                                    <button
-                                        class="w-7 h-7 rounded-md border border-green-200 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-500 flex items-center justify-center transition-all shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">check</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div
-                                class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-blue-50 transition-colors cursor-pointer px-4">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-slate-50 text-slate-500 flex items-center justify-center border border-slate-200 group-hover:bg-white group-hover:border-primary/50 group-hover:text-primary transition-colors shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">pill</span>
-                                    </div>
-                                    <div>
-                                        <p class="text-text-main text-sm font-bold">Zopiclone</p>
-                                        <p class="text-text-muted text-xs">3.75mg • PRN</p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col items-end">
-                                    <span
-                                        class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded group-hover:bg-white border border-transparent group-hover:border-blue-100 transition-all">PRN</span>
-                                    <span class="text-text-muted text-[9px] mt-0.5 font-medium">As Needed</span>
-                                </div>
-                            </div>
-                            <div
-                                class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-indigo-800 text-[16px]">dark_mode</span>
-                                    <span
-                                        class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Mid-night</span>
-                                </div>
-                                <span
-                                    class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">00:00
-                                    - 06:00</span>
-                            </div>
-                            <div class="p-8 text-center bg-slate-50/30">
-                                <p class="text-xs text-text-muted font-medium italic">No scheduled medications</p>
-                            </div>
-                        </div>
-                        <div class="p-2 border-t border-blue-50 bg-slate-50 flex items-center justify-center">
+                            class="p-5 flex gap-4 overflow-x-auto pb-6 snap-x scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
                             <button
-                                class="w-full text-[10px] text-text-muted font-bold uppercase tracking-widest hover:text-primary transition-colors text-center py-1.5">
-                                View Full History
+                                class="flex-shrink-0 w-32 bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32 snap-start">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
+                                    <span class="material-symbols-outlined">directions_walk</span>
+                                </div>
+                                <div class="flex flex-col items-center justify-center">
+                                    <span
+                                        class="text-xs font-bold text-text-main group-hover:text-primary-dark">Walk</span>
+                                    <span
+                                        class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Morning
+                                        Routine</span>
+                                </div>
                             </button>
-                        </div>
-                    </div>
-                    <div class="bg-surface-white rounded-2xl border border-blue-100 shadow-card overflow-hidden">
-                        <div class="p-4 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
-                            <h3 class="text-text-main font-semibold text-sm font-display">Schedule</h3>
                             <button
-                                class="flex items-center gap-1.5 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm active:scale-95">
-                                <span class="material-symbols-outlined text-[16px]">add</span> Add
+                                class="flex-shrink-0 w-32 bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32 snap-start">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
+                                    <span class="material-symbols-outlined">music_note</span>
+                                </div>
+                                <div class="flex flex-col items-center justify-center">
+                                    <span
+                                        class="text-xs font-bold text-text-main group-hover:text-primary-dark">Music</span>
+                                    <span
+                                        class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Selection:<br />Classical</span>
+                                </div>
                             </button>
-                        </div>
-                        <div class="p-5">
-                            <div class="relative pl-2">
-                                <div class="absolute left-[7px] top-2 bottom-2 w-0.5 bg-blue-100"></div>
-                                <div class="relative flex gap-4 mb-6 opacity-60 grayscale">
-                                    <div
-                                        class="w-4 h-4 rounded-full bg-slate-200 border-2 border-white z-10 shrink-0 mt-0.5">
-                                    </div>
-                                    <div>
-                                        <p class="text-text-muted text-xs mb-0.5">09:00 AM</p>
-                                        <p class="text-text-secondary text-sm font-medium line-through">Breakfast</p>
-                                    </div>
-                                </div>
-                                <div class="relative flex gap-4 mb-6">
-                                    <div
-                                        class="w-4 h-4 rounded-full bg-primary border-2 border-white ring-4 ring-blue-50 z-10 shrink-0 mt-0.5 shadow-md">
-                                    </div>
-                                    <div
-                                        class="bg-gradient-to-r from-primary-light to-white border border-blue-100 p-3 -m-2 rounded-xl w-full shadow-sm">
-                                        <div class="flex justify-between items-start">
-                                            <p class="text-primary-dark text-xs mb-0.5 font-bold">10:00 AM</p>
-                                            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                                        </div>
-                                        <p class="text-text-main text-sm font-bold">Physiotherapy Session</p>
-                                        <p class="text-text-secondary text-xs mt-1 flex items-center gap-1">
-                                            <span class="material-symbols-outlined text-[12px]">location_on</span> Gym
-                                            Room A
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="relative flex gap-4 mb-6">
-                                    <div
-                                        class="w-4 h-4 rounded-full bg-white border-2 border-slate-300 z-10 shrink-0 mt-0.5">
-                                    </div>
-                                    <div>
-                                        <p class="text-text-muted text-xs mb-0.5">12:30 PM</p>
-                                        <p class="text-text-main text-sm font-medium">Lunch</p>
-                                    </div>
-                                </div>
-                                <div class="relative flex gap-4">
-                                    <div
-                                        class="w-4 h-4 rounded-full bg-white border-2 border-slate-300 z-10 shrink-0 mt-0.5">
-                                    </div>
-                                    <div>
-                                        <p class="text-text-muted text-xs mb-0.5">03:00 PM</p>
-                                        <p class="text-text-main text-sm font-medium">Family Visit (Daughter)</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-surface-white rounded-2xl border border-blue-100 shadow-card overflow-hidden">
-                        <div class="p-4 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
-                            <h3 class="text-text-main font-semibold text-sm font-display">To-Do List</h3>
                             <button
-                                class="flex items-center gap-1 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-2 py-1 rounded-lg border border-blue-100 shadow-sm active:scale-95">
-                                <span class="material-symbols-outlined text-[16px]">add</span>
-                                Add Task
+                                class="flex-shrink-0 w-32 bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32 snap-start">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
+                                    <span class="material-symbols-outlined">menu_book</span>
+                                </div>
+                                <div class="flex flex-col items-center justify-center">
+                                    <span
+                                        class="text-xs font-bold text-text-main group-hover:text-primary-dark">Read</span>
+                                    <span
+                                        class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Book:<br />Gatsby</span>
+                                </div>
                             </button>
-                        </div>
-                        <div class="p-5 space-y-3">
-                            <label
-                                class="flex items-start gap-3 cursor-pointer group p-2 hover:bg-blue-50/50 rounded-lg -mx-2 transition-colors border border-transparent hover:border-blue-100/50">
-                                <input checked=""
-                                    class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 bg-white"
-                                    type="checkbox" />
-                                <span
-                                    class="text-text-muted text-sm line-through group-hover:text-text-secondary transition-colors decoration-slate-400">Check
-                                    fluid intake logs</span>
-                            </label>
-                            <label
-                                class="flex items-start gap-3 cursor-pointer group p-2 hover:bg-blue-50/50 rounded-lg -mx-2 transition-colors border border-transparent hover:border-blue-100/50">
-                                <input
-                                    class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 bg-white"
-                                    type="checkbox" />
-                                <span
-                                    class="text-text-main text-sm group-hover:text-primary transition-colors font-medium">Update
-                                    risk assessment</span>
-                            </label>
-                            <label
-                                class="flex items-start gap-3 cursor-pointer group p-2 hover:bg-blue-50/50 rounded-lg -mx-2 transition-colors border border-transparent hover:border-blue-100/50">
-                                <input
-                                    class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 bg-white"
-                                    type="checkbox" />
-                                <span
-                                    class="text-text-main text-sm group-hover:text-primary transition-colors font-medium">Call
-                                    Pharmacy regarding refill</span>
-                            </label>
+                            <button
+                                class="flex-shrink-0 w-32 bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32 snap-start">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
+                                    <span class="material-symbols-outlined">accessibility_new</span>
+                                </div>
+                                <div class="flex flex-col items-center justify-center">
+                                    <span
+                                        class="text-xs font-bold text-text-main group-hover:text-primary-dark">Physio</span>
+                                    <span
+                                        class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Exercises:<br />Leg
+                                        Lifts</span>
+                                </div>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+    ```
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
