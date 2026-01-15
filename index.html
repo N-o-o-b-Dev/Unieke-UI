@@ -901,7 +901,7 @@
                         <!-- MEDICATIONS SECTION (MOVED) -->
                         <div class="w-full lg:w-1/2 flex flex-col">
                             <div
-                                class="bg-surface-white rounded-2xl p-0 border border-blue-100 shadow-card overflow-hidden flex-1">
+                                class="bg-surface-white rounded-2xl p-0 border border-blue-100 shadow-card overflow-hidden flex-1 flex flex-col">
                                 <div
                                     class="p-3 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
                                     <h3 class="text-text-main font-bold text-sm font-display">Medications</h3>
@@ -919,10 +919,12 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="flex flex-col bg-white relative">
-                                    <div
-                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-b border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
+                                <div class="flex flex-col bg-white relative flex-1 overflow-y-auto">
+                                    <div onclick="toggleMedSection('meds-morning', 'icon-morning')"
+                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-b border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm cursor-pointer hover:bg-blue-100/50 transition-colors">
                                         <div class="flex items-center gap-2">
+                                            <span id="icon-morning"
+                                                class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
                                             <span
                                                 class="material-symbols-outlined text-amber-500 text-[16px]">wb_sunny</span>
                                             <span
@@ -933,47 +935,53 @@
                                             class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">06:00
                                             - 12:00</span>
                                     </div>
-                                    <div
-                                        class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-primary-light/10 transition-colors cursor-pointer px-4">
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-white group-hover:border-green-300 transition-colors shadow-sm">
-                                                <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                                    <div id="meds-morning">
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-primary-light/10 transition-colors cursor-pointer px-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-white group-hover:border-green-300 transition-colors shadow-sm">
+                                                    <span
+                                                        class="material-symbols-outlined text-[16px]">check_circle</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Paracetamol</p>
+                                                    <p class="text-text-muted text-xs">1g • Oral</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p class="text-text-main text-sm font-bold">Paracetamol</p>
-                                                <p class="text-text-muted text-xs">1g • Oral</p>
+                                            <div class="flex flex-col items-end">
+                                                <span
+                                                    class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">08:00</span>
+                                                <span
+                                                    class="text-green-600 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Given</span>
                                             </div>
                                         </div>
-                                        <div class="flex flex-col items-end">
-                                            <span
-                                                class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">08:00</span>
-                                            <span
-                                                class="text-green-600 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Given</span>
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-primary-light/10 transition-colors cursor-pointer px-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-white group-hover:border-green-300 transition-colors shadow-sm">
+                                                    <span
+                                                        class="material-symbols-outlined text-[16px]">check_circle</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Atorvastatin</p>
+                                                    <p class="text-text-muted text-xs">20mg • Oral</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <span
+                                                    class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">08:00</span>
+                                                <span
+                                                    class="text-green-600 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Given</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div
-                                        class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-primary-light/10 transition-colors cursor-pointer px-4">
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-white group-hover:border-green-300 transition-colors shadow-sm">
-                                                <span class="material-symbols-outlined text-[16px]">check_circle</span>
-                                            </div>
-                                            <div>
-                                                <p class="text-text-main text-sm font-bold">Atorvastatin</p>
-                                                <p class="text-text-muted text-xs">20mg • Oral</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col items-end">
-                                            <span
-                                                class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">08:00</span>
-                                            <span
-                                                class="text-green-600 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Given</span>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
+                                    <div onclick="toggleMedSection('meds-afternoon', 'icon-afternoon')"
+                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm cursor-pointer hover:bg-blue-100/50 transition-colors">
                                         <div class="flex items-center gap-2">
+                                            <span id="icon-afternoon"
+                                                class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
                                             <span
                                                 class="material-symbols-outlined text-orange-500 text-[16px]">light_mode</span>
                                             <span
@@ -984,32 +992,36 @@
                                             class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">12:00
                                             - 16:00</span>
                                     </div>
-                                    <div
-                                        class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-amber-50/30 transition-colors cursor-pointer px-4 bg-amber-50/10">
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
-                                                <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                    <div id="meds-afternoon">
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-amber-50/30 transition-colors cursor-pointer px-4 bg-amber-50/10">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Metformin</p>
+                                                    <p class="text-text-muted text-xs">500mg • With Lunch</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p class="text-text-main text-sm font-bold">Metformin</p>
-                                                <p class="text-text-muted text-xs">500mg • With Lunch</p>
+                                            <div class="flex items-center gap-1.5">
+                                                <button
+                                                    class="w-7 h-7 rounded-md border border-red-200 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center transition-all shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">close</span>
+                                                </button>
+                                                <button
+                                                    class="w-7 h-7 rounded-md border border-green-200 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-500 flex items-center justify-center transition-all shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">check</span>
+                                                </button>
                                             </div>
-                                        </div>
-                                        <div class="flex items-center gap-1.5">
-                                            <button
-                                                class="w-7 h-7 rounded-md border border-red-200 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center transition-all shadow-sm">
-                                                <span class="material-symbols-outlined text-[16px]">close</span>
-                                            </button>
-                                            <button
-                                                class="w-7 h-7 rounded-md border border-green-200 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-500 flex items-center justify-center transition-all shadow-sm">
-                                                <span class="material-symbols-outlined text-[16px]">check</span>
-                                            </button>
                                         </div>
                                     </div>
-                                    <div
-                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
+                                    <div onclick="toggleMedSection('meds-evening', 'icon-evening')"
+                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm cursor-pointer hover:bg-blue-100/50 transition-colors">
                                         <div class="flex items-center gap-2">
+                                            <span id="icon-evening"
+                                                class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
                                             <span
                                                 class="material-symbols-outlined text-indigo-400 text-[16px]">nights_stay</span>
                                             <span
@@ -1020,28 +1032,32 @@
                                             class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">16:00
                                             - 19:00</span>
                                     </div>
-                                    <div
-                                        class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-red-50 transition-colors cursor-pointer px-4">
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-8 h-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center border border-red-100 group-hover:bg-white group-hover:border-red-300 transition-colors shadow-sm">
-                                                <span class="material-symbols-outlined text-[16px]">cancel</span>
+                                    <div id="meds-evening">
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-red-50 transition-colors cursor-pointer px-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center border border-red-100 group-hover:bg-white group-hover:border-red-300 transition-colors shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">cancel</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Amlodipine</p>
+                                                    <p class="text-text-muted text-xs">10mg • Oral</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p class="text-text-main text-sm font-bold">Amlodipine</p>
-                                                <p class="text-text-muted text-xs">10mg • Oral</p>
+                                            <div class="flex flex-col items-end">
+                                                <span
+                                                    class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">17:00</span>
+                                                <span
+                                                    class="text-red-500 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Refused</span>
                                             </div>
-                                        </div>
-                                        <div class="flex flex-col items-end">
-                                            <span
-                                                class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">17:00</span>
-                                            <span
-                                                class="text-red-500 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Refused</span>
                                         </div>
                                     </div>
-                                    <div
-                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
+                                    <div onclick="toggleMedSection('meds-night', 'icon-night')"
+                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm cursor-pointer hover:bg-blue-100/50 transition-colors">
                                         <div class="flex items-center gap-2">
+                                            <span id="icon-night"
+                                                class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
                                             <span
                                                 class="material-symbols-outlined text-slate-500 text-[16px]">bedtime</span>
                                             <span
@@ -1052,50 +1068,55 @@
                                             class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">19:00
                                             - 23:59</span>
                                     </div>
-                                    <div
-                                        class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-amber-50/30 transition-colors cursor-pointer px-4 bg-amber-50/10">
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
-                                                <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                    <div id="meds-night">
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-amber-50/30 transition-colors cursor-pointer px-4 bg-amber-50/10">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Donepezil</p>
+                                                    <p class="text-text-muted text-xs">10mg • Bedtime</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p class="text-text-main text-sm font-bold">Donepezil</p>
-                                                <p class="text-text-muted text-xs">10mg • Bedtime</p>
+                                            <div class="flex items-center gap-1.5">
+                                                <button
+                                                    class="w-7 h-7 rounded-md border border-red-200 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center transition-all shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">close</span>
+                                                </button>
+                                                <button
+                                                    class="w-7 h-7 rounded-md border border-green-200 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-500 flex items-center justify-center transition-all shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">check</span>
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-1.5">
-                                            <button
-                                                class="w-7 h-7 rounded-md border border-red-200 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center transition-all shadow-sm">
-                                                <span class="material-symbols-outlined text-[16px]">close</span>
-                                            </button>
-                                            <button
-                                                class="w-7 h-7 rounded-md border border-green-200 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-500 flex items-center justify-center transition-all shadow-sm">
-                                                <span class="material-symbols-outlined text-[16px]">check</span>
-                                            </button>
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-blue-50 transition-colors cursor-pointer px-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-slate-50 text-slate-500 flex items-center justify-center border border-slate-200 group-hover:bg-white group-hover:border-primary/50 group-hover:text-primary transition-colors shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">pill</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Zopiclone</p>
+                                                    <p class="text-text-muted text-xs">3.75mg • PRN</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <span
+                                                    class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded group-hover:bg-white border border-transparent group-hover:border-blue-100 transition-all">PRN</span>
+                                                <span class="text-text-muted text-[9px] mt-0.5 font-medium">As
+                                                    Needed</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div
-                                        class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-blue-50 transition-colors cursor-pointer px-4">
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-8 h-8 rounded-full bg-slate-50 text-slate-500 flex items-center justify-center border border-slate-200 group-hover:bg-white group-hover:border-primary/50 group-hover:text-primary transition-colors shadow-sm">
-                                                <span class="material-symbols-outlined text-[16px]">pill</span>
-                                            </div>
-                                            <div>
-                                                <p class="text-text-main text-sm font-bold">Zopiclone</p>
-                                                <p class="text-text-muted text-xs">3.75mg • PRN</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col items-end">
-                                            <span
-                                                class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded group-hover:bg-white border border-transparent group-hover:border-blue-100 transition-all">PRN</span>
-                                            <span class="text-text-muted text-[9px] mt-0.5 font-medium">As Needed</span>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm">
+                                    <div onclick="toggleMedSection('meds-midnight', 'icon-midnight')"
+                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm cursor-pointer hover:bg-blue-100/50 transition-colors">
                                         <div class="flex items-center gap-2">
+                                            <span id="icon-midnight"
+                                                class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
                                             <span
                                                 class="material-symbols-outlined text-indigo-800 text-[16px]">dark_mode</span>
                                             <span
@@ -1106,9 +1127,12 @@
                                             class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">00:00
                                             - 06:00</span>
                                     </div>
-                                    <div class="p-8 text-center bg-slate-50/30">
-                                        <p class="text-xs text-text-muted font-medium italic">No scheduled medications
-                                        </p>
+                                    <div id="meds-midnight">
+                                        <div class="p-8 text-center bg-slate-50/30">
+                                            <p class="text-xs text-text-muted font-medium italic">No scheduled
+                                                medications
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="p-2 border-t border-blue-50 bg-slate-50 flex items-center justify-center">
@@ -1404,6 +1428,21 @@
                     left: scrollAmount,
                     behavior: 'smooth'
                 });
+            }
+        }
+
+        function toggleMedSection(contentId, iconId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(iconId);
+            if (!content || !icon) return;
+
+            content.classList.toggle('hidden');
+            if (content.classList.contains('hidden')) {
+                icon.style.transform = 'rotate(-90deg)';
+                content.classList.remove('animate-in', 'fade-in', 'slide-in-from-top-2');
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+                content.classList.add('animate-in', 'fade-in', 'slide-in-from-top-2');
             }
         }
 
