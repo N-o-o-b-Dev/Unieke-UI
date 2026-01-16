@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Service User Directory - CareOrg</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f8f9fa",
+                        "background-dark": "#101922",
+                        "sidebar-bg": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-rail-item {
+            @apply flex flex-col items-center justify-center py-3 px-1 text-center transition-all duration-200 hover:bg-blue-50 text-slate-600;
+        }
+        .sidebar-rail-item.active {
+            @apply text-primary bg-blue-50 border-r-4 border-primary;
+        }
+        .sidebar-rail-item span.material-symbols-outlined {
+            @apply text-[24px] mb-1;
+        }
+        .sidebar-rail-item p {
+            @apply text-[10px] font-medium leading-tight px-1;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-[#111418] dark:text-gray-100">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Mobile Overlay -->
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden md:hidden transition-opacity opacity-0"
+            onclick="toggleSidebar()"></div>
+
+        <aside id="sidebar"
+            class="fixed md:static inset-y-0 left-0 z-50 w-24 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col overflow-y-auto no-scrollbar transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+            <div class="p-4 flex justify-center border-b border-gray-100 mb-2">
+                <div class="size-10 text-primary">
+                    <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+            <nav class="flex flex-col flex-1">
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">account_circle</span>
+                    <p>My Account</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">badge</span>
+                    <p>Staff</p>
+                </a>
+                <a class="sidebar-rail-item active" href="#">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">person_add</span>
+                    <p>Service User</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">handshake</span>
+                    <p>Handover</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">assignment</span>
+                    <p>Daily Plan &amp; Allocation</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">description</span>
+                    <p>Assessments</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    <p>Calendar</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">checklist</span>
+                    <p>To Do</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">schedule</span>
+                    <p>Rota</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">payments</span>
+                    <p>Finance</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">contact_page</span>
+                    <p>Contacts</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">restaurant_menu</span>
+                    <p>Food Menu</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">folder_open</span>
+                    <p>File Manager</p>
+                </a>
+                <a class="sidebar-rail-item" href="#">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <p>Reports</p>
+                </a>
+                <a class="sidebar-rail-item mt-auto mb-4" href="#">
+                    <span class="material-symbols-outlined">settings</span>
+                    <p>Settings</p>
+                </a>
+            </nav>
+        </aside>
+        <div class="flex-1 flex flex-col overflow-y-auto">
+            <header
+                class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 bg-white px-8 py-3 sticky top-0 z-40">
+                <div class="flex items-center gap-3">
+                    <button id="sidebar-toggle"
+                        class="md:hidden p-2 -ml-2 text-slate-500 hover:text-primary transition-colors"
+                        onclick="toggleSidebar()">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
+                    <h2 class="text-lg font-bold leading-tight text-slate-800">Service User Directory</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex gap-2">
+                        <button
+                            class="flex items-center justify-center rounded-lg h-9 w-9 bg-gray-50 text-gray-500 hover:bg-gray-100 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">notifications</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-slate-800">Admin User</p>
+                            <p class="text-[10px] text-slate-500">Super Admin</p>
+                        </div>
+                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 border border-gray-200"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD1NXRekEWqYXxfohIUbr5fE6FhrGBsXOQHQM23H83Vq-GWUG4HL1veMRZRHYISLh8OBrfUWwn6G8DsUNXCyvwfRbEGpDhwMpEgEM6_4sMEPaZ7qlfYCO-eiFBYOYif0S-ckZzTBZEV_MkYv8LEADj6XbHMaWYCBa33-w8HhFRlq9N0QcpONj69BjVzt9tYnIUaf6wiC-Rfy0nzhkmt_vK6yzDpkP29QBxHN_34-x9yQAVkb7yfk_2iabSGPOje4G2-iSGXqFCaxw4k");'>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <main class="p-4 md:p-8">
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <a class="text-slate-400 text-sm font-medium hover:underline" href="#">Home</a>
+                    <span class="text-slate-400 text-sm font-medium">/</span>
+                    <span class="text-primary text-sm font-medium">Service Users</span>
+                </div>
+                <div class="flex flex-wrap justify-between items-center gap-3 mb-8">
+                    <h1 class="text-slate-900 text-3xl font-black tracking-tight">Service Users</h1>
+                    <button
+                        class="flex items-center justify-center rounded-lg h-11 px-5 bg-primary text-white text-sm font-bold shadow-lg shadow-blue-200 hover:bg-blue-600 transition-all">
+                        <span class="material-symbols-outlined mr-2 text-[20px]">add</span>
+                        <span>Add New User</span>
+                    </button>
+                </div>
+                <div
+                    class="flex flex-wrap items-center justify-between gap-4 p-5 bg-white rounded-xl shadow-sm border border-gray-100 mb-8">
+                    <div class="flex flex-wrap items-center gap-4 flex-1">
+                        <div class="relative w-full md:w-auto md:min-w-[320px]">
+                            <span
+                                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                            <input
+                                class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border-gray-100 border rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                placeholder="Search by name or room..." type="text" />
+                        </div>
+                        <div class="flex gap-2">
+                            <button
+                                class="flex h-10 items-center justify-center gap-x-2 rounded-lg bg-gray-50 border border-gray-100 px-4 hover:bg-gray-100 transition-colors">
+                                <p class="text-slate-700 text-sm font-medium">Status: Active</p>
+                                <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                            </button>
+                            <button
+                                class="flex h-10 items-center justify-center gap-x-2 rounded-lg bg-gray-50 border border-gray-100 px-4 hover:bg-gray-100 transition-colors">
+                                <p class="text-slate-700 text-sm font-medium">Gender: All</p>
+                                <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                            </button>
+                            <button
+                                class="flex h-10 items-center justify-center gap-x-2 rounded-lg bg-gray-50 border border-gray-100 px-4 hover:bg-gray-100 transition-colors">
+                                <p class="text-slate-700 text-sm font-medium">Key Worker: All</p>
+                                <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 border-l pl-4 border-gray-100">
+                        <button class="p-2 text-primary bg-blue-50 rounded-lg">
+                            <span class="material-symbols-outlined">grid_view</span>
+                        </button>
+                        <button class="p-2 text-slate-400 hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">view_list</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+                    <div
+                        class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="size-16 rounded-full bg-center bg-cover border-2 border-primary/20 shadow-sm"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBNlS-5Hj7jCFyb0n8FW5gcc4wVCrLpFXXoGtnzmEHE6hNJbUdbfYZjxCKn_hvzZ4uuDkdcy2_74Zp9I8M0Ndz5wPOK4lpbnApS_o4j5lZBDdoobLcppfet0Eu-9c8BstNJsJBn06A8aPgWgocZgJ2bTYM-kyBf4sJEsTO1WYtiDdTTpePLTpIETCWAwnTwaysBOWZNLBWDhpHHA-rLLR2XpAy-wXEC0d4jPakbRS0b4IQNWpJI03KK536ueCpBdCJP9SANLsLtRXsV");'>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-slate-900 text-lg font-bold leading-none mb-2">Arthur Morgan
+                                        </h3>
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700">
+                                            Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4">
+                                    <div class="text-right">
+                                        <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest mb-1">
+                                            Room
+                                        </p>
+                                        <p class="text-primary font-black text-xl leading-none">R-001</p>
+                                    </div>
+                                    <button class="text-slate-400 hover:text-primary transition-colors"
+                                        onclick="toggleCard(this)">
+                                        <span
+                                            class="material-symbols-outlined transition-transform duration-300">expand_less</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-details transition-all duration-300 overflow-hidden">
+                                <div class="grid grid-cols-2 gap-y-4 gap-x-6 mb-6 text-sm">
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Gender</p>
+                                        <p class="font-semibold text-slate-800">Male</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Age</p>
+                                        <p class="font-semibold text-slate-800">82</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">DOB</p>
+                                        <p class="font-semibold text-slate-800">12/05/1942</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Admitted</p>
+                                        <p class="font-semibold text-slate-800">10/01/2023</p>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Key Worker</p>
+                                        <p class="font-semibold text-slate-800">Nurse Sarah Jenkins</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2 mb-5 border-t border-gray-50 pt-5">
+                                    <div class="flex-1 bg-gray-50 p-2 rounded-lg text-center">
+                                        <p class="text-[9px] text-slate-400 font-black uppercase mb-0.5">DoLS</p>
+                                        <p class="text-xs font-bold text-amber-600">Yes</p>
+                                    </div>
+                                    <div class="flex-1 bg-gray-50 p-2 rounded-lg text-center">
+                                        <p class="text-[9px] text-slate-400 font-black uppercase mb-0.5">ACP</p>
+                                        <p class="text-xs font-bold text-primary">Yes</p>
+                                    </div>
+                                    <div class="flex-1 bg-red-50 p-2 rounded-lg text-center border border-red-100">
+                                        <p class="text-[9px] text-red-400 font-black uppercase mb-0.5">DNACPR</p>
+                                        <p class="text-xs font-bold text-red-600">Yes</p>
+                                    </div>
+                                </div>
+                                <div class="bg-orange-50 p-3 rounded-lg border border-orange-100">
+                                    <p class="text-[10px] text-orange-600 font-black uppercase mb-1">Critical Allergies
+                                    </p>
+                                    <p class="text-sm font-semibold text-orange-900">Penicillin, Latex, Dairy</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex border-t border-gray-100">
+                            <button
+                                class="flex-1 py-4 text-primary text-sm font-bold hover:bg-primary hover:text-white transition-all border-r border-gray-100">
+                                View Details
+                            </button>
+                            <button
+                                class="p-4 text-slate-400 hover:text-primary transition-colors border-r border-gray-100">
+                                <span class="material-symbols-outlined text-[20px]">edit</span>
+                            </button>
+                            <button class="p-4 text-slate-400 hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">print</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="size-16 rounded-full bg-center bg-cover border-2 border-primary/20 shadow-sm"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA4YcjXhiptQxbFuArlUm7ht4qgblC792yWBcGtbVvyRJg2z3q8-0M2bsMFTplDmG-kqX3d7AM-xHTF47bMoZX1Z4uOZcMbM1g8P0agXVJzlYN1o0mOFbKWDtYRb2EO5EGOvmS2oEL39BR-85x_0yw7Rsi4jrufbtVM03R1nzcFk2v8xje28UGMSOSWfQRmhCB1HTHuU5VnlJAO4b3E7pjdlrcvtK4482eUFdbqAb8okPu9XEjjzEgZqdKiKLYtTUUCm4vAdZx7fZoK");'>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-slate-900 text-lg font-bold leading-none mb-2">Martha Miller
+                                        </h3>
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700">
+                                            Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4">
+                                    <div class="text-right">
+                                        <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest mb-1">
+                                            Room
+                                        </p>
+                                        <p class="text-primary font-black text-xl leading-none">R-104</p>
+                                    </div>
+                                    <button class="text-slate-400 hover:text-primary transition-colors"
+                                        onclick="toggleCard(this)">
+                                        <span
+                                            class="material-symbols-outlined transition-transform duration-300">expand_less</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-details transition-all duration-300 overflow-hidden">
+                                <div class="grid grid-cols-2 gap-y-4 gap-x-6 mb-6 text-sm">
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Gender</p>
+                                        <p class="font-semibold text-slate-800">Female</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Age</p>
+                                        <p class="font-semibold text-slate-800">76</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">DOB</p>
+                                        <p class="font-semibold text-slate-800">30/08/1947</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Admitted</p>
+                                        <p class="font-semibold text-slate-800">14/11/2023</p>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Key Worker</p>
+                                        <p class="font-semibold text-slate-800">James Cooper</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2 mb-5 border-t border-gray-50 pt-5">
+                                    <div class="flex-1 bg-gray-50 p-2 rounded-lg text-center">
+                                        <p class="text-[9px] text-slate-400 font-black uppercase mb-0.5">DoLS</p>
+                                        <p class="text-xs font-bold text-slate-400">No</p>
+                                    </div>
+                                    <div class="flex-1 bg-gray-50 p-2 rounded-lg text-center">
+                                        <p class="text-[9px] text-slate-400 font-black uppercase mb-0.5">ACP</p>
+                                        <p class="text-xs font-bold text-primary">Yes</p>
+                                    </div>
+                                    <div class="flex-1 bg-gray-50 p-2 rounded-lg text-center">
+                                        <p class="text-[9px] text-slate-400 font-black uppercase mb-0.5">DNACPR</p>
+                                        <p class="text-xs font-bold text-slate-400">No</p>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                    <p class="text-[10px] text-slate-400 font-black uppercase mb-1">Critical Allergies
+                                    </p>
+                                    <p class="text-sm font-semibold text-slate-500 italic">No known allergies</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex border-t border-gray-100">
+                            <button
+                                class="flex-1 py-4 text-primary text-sm font-bold hover:bg-primary hover:text-white transition-all border-r border-gray-100">
+                                View Details
+                            </button>
+                            <button
+                                class="p-4 text-slate-400 hover:text-primary transition-colors border-r border-gray-100">
+                                <span class="material-symbols-outlined text-[20px]">edit</span>
+                            </button>
+                            <button class="p-4 text-slate-400 hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">print</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="size-16 rounded-full bg-center bg-cover border-2 border-primary/20 shadow-sm"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDUhOiqTdjAH-NHm8ZqUCOX6Ouxut_K0Gl70grvg2NWNXD61mPlRviZtq2rfJsOAeQJKkYVn2JhW-mtVIfzpiWWFmjiT212QIutoOCFkKvk_iFCsVxl1zISuxJELVvbNQQc0DGZ6GqWeH5svT4G_aABZxYWSgYGX10tC5R7u88XXFenREemr_gmMQEgIgLjKxCzSX-nT-9W79G8ipi0_c8nhc37eNDdTN8ZClAD_SLRCekboCunjb_hZAEloZwszACoj0nsziXtE3ai");'>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-slate-900 text-lg font-bold leading-none mb-2">Benjamin Carter
+                                        </h3>
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700">
+                                            Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4">
+                                    <div class="text-right">
+                                        <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest mb-1">
+                                            Room
+                                        </p>
+                                        <p class="text-primary font-black text-xl leading-none">R-012</p>
+                                    </div>
+                                    <button class="text-slate-400 hover:text-primary transition-colors"
+                                        onclick="toggleCard(this)">
+                                        <span
+                                            class="material-symbols-outlined transition-transform duration-300">expand_less</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-details transition-all duration-300 overflow-hidden">
+                                <div class="grid grid-cols-2 gap-y-4 gap-x-6 mb-6 text-sm">
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Gender</p>
+                                        <p class="font-semibold text-slate-800">Male</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Age</p>
+                                        <p class="font-semibold text-slate-800">89</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">DOB</p>
+                                        <p class="font-semibold text-slate-800">05/03/1935</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Admitted</p>
+                                        <p class="font-semibold text-slate-800">22/06/2022</p>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <p class="text-slate-400 text-[11px] font-bold uppercase mb-0.5">Key Worker</p>
+                                        <p class="font-semibold text-slate-800">Nurse Sarah Jenkins</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2 mb-5 border-t border-gray-50 pt-5">
+                                    <div class="flex-1 bg-gray-50 p-2 rounded-lg text-center">
+                                        <p class="text-[9px] text-slate-400 font-black uppercase mb-0.5">DoLS</p>
+                                        <p class="text-xs font-bold text-amber-600">Yes</p>
+                                    </div>
+                                    <div class="flex-1 bg-gray-50 p-2 rounded-lg text-center">
+                                        <p class="text-[9px] text-slate-400 font-black uppercase mb-0.5">ACP</p>
+                                        <p class="text-xs font-bold text-slate-400">No</p>
+                                    </div>
+                                    <div class="flex-1 bg-red-50 p-2 rounded-lg text-center border border-red-100">
+                                        <p class="text-[9px] text-red-400 font-black uppercase mb-0.5">DNACPR</p>
+                                        <p class="text-xs font-bold text-red-600">Yes</p>
+                                    </div>
+                                </div>
+                                <div class="bg-orange-50 p-3 rounded-lg border border-orange-100">
+                                    <p class="text-[10px] text-orange-600 font-black uppercase mb-1">Critical Allergies
+                                    </p>
+                                    <p class="text-sm font-semibold text-orange-900">Peanuts, Morphine</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex border-t border-gray-100">
+                            <button
+                                class="flex-1 py-4 text-primary text-sm font-bold hover:bg-primary hover:text-white transition-all border-r border-gray-100">
+                                View Details
+                            </button>
+                            <button
+                                class="p-4 text-slate-400 hover:text-primary transition-colors border-r border-gray-100">
+                                <span class="material-symbols-outlined text-[20px]">edit</span>
+                            </button>
+                            <button class="p-4 text-slate-400 hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">print</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <footer class="mt-12 py-6 border-t border-gray-200 flex flex-wrap justify-between items-center gap-4">
+                    <p class="text-sm text-slate-500 font-medium">Showing 3 of 128 service users</p>
+                    <div class="flex gap-2">
+                        <button
+                            class="px-4 py-2 rounded-lg bg-gray-100 text-sm font-bold text-slate-400 cursor-not-allowed">Previous</button>
+                        <button
+                            class="px-4 py-2 rounded-lg bg-primary text-white text-sm font-bold shadow-md shadow-blue-100">1</button>
+                        <button
+                            class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-slate-700 text-sm font-bold hover:bg-gray-50 transition-colors">2</button>
+                        <button
+                            class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-slate-700 text-sm font-bold hover:bg-gray-50 transition-colors">3</button>
+                        <button
+                            class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-slate-700 text-sm font-bold hover:bg-gray-50 transition-colors">Next</button>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                // Small delay to allow display:block to apply before opacity transition
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-0');
+                }, 10);
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function toggleCard(button) {
+            const card = button.closest('.bg-white');
+            const details = card.querySelector('.card-details');
+            const icon = button.querySelector('.material-symbols-outlined');
+
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                icon.textContent = 'expand_less';
+                icon.classList.remove('rotate-180');
+            } else {
+                details.classList.add('hidden');
+                icon.textContent = 'expand_more';
+                icon.classList.add('rotate-180');
+            }
+        }
+    </script>
+</body>
+
+</html>
