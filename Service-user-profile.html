@@ -1,0 +1,1478 @@
+<html class="light" lang="en">
+
+<head></head>
+
+<body
+    class="bg-background-warm font-body text-text-main overflow-hidden h-screen flex selection:bg-primary/20 selection:text-primary-dark">
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Service User Profile - CareManager</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6", // Blue 500
+                        "primary-dark": "#2563eb", // Blue 600
+                        "primary-light": "#eff6ff", // Blue 50
+                        "primary-subtle": "#dbeafe", // Blue 100
+                        "background-warm": "#fafaf9", // Stone 50 (Warm White)
+                        "surface-white": "#ffffff",
+                        "border-blue": "#e0f2fe", // Light Blue 200
+                        "text-main": "#0f172a", // Slate 900
+                        "text-secondary": "#334155", // Slate 700
+                        "text-muted": "#64748b", // Slate 500
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                    boxShadow: {
+                        "soft": "0 4px 25px -4px rgba(59, 130, 246, 0.08)",
+                        "card": "0 1px 3px 0 rgba(59, 130, 246, 0.1), 0 1px 2px -1px rgba(59, 130, 246, 0.06)",
+                        "blue-glow": "0 0 15px rgba(59, 130, 246, 0.15)"
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary {
+            list-style: none;
+        }
+
+        #tab-fluid:checked~div .label-fluid,
+        #tab-vitals:checked~div .label-vitals,
+        #tab-nutrition:checked~div .label-nutrition {
+            background-color: white;
+            color: #3b82f6;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+            border-color: #e0f2fe;
+        }
+
+        #tab-fluid:checked~.content-fluid,
+        #tab-vitals:checked~.content-vitals,
+        #tab-nutrition:checked~.content-nutrition {
+            display: block;
+            animation: fade-in 0.25s ease-out forwards;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+
+    <!-- Mobile Backdrop -->
+    <div id="sidebar-backdrop"
+        class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity opacity-0"
+        onclick="toggleSidebar()"></div>
+
+    <aside id="sidebar"
+        class="w-24 h-full fixed lg:static inset-y-0 left-0 flex flex-col bg-surface-white border-r border-blue-100 flex-shrink-0 z-50 shadow-[4px_0_24px_rgba(59,130,246,0.03)] transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="p-4 flex flex-col items-center justify-center border-b border-blue-50/50">
+            <div
+                class="bg-gradient-to-br from-primary to-primary-dark aspect-square rounded-xl size-10 flex items-center justify-center shadow-lg shadow-blue-500/30 mb-2">
+                <span class="material-symbols-outlined text-white">medical_services</span>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 flex flex-col gap-1 overflow-y-auto pt-2 pb-6">
+            <div class="px-3 mb-2 mt-2 flex justify-center">
+                <div class="h-0.5 w-8 bg-blue-100/50 rounded-full"></div>
+            </div>
+            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">edit_note</span>
+                <span class="text-[10px] font-bold">Records</span>
+            </a>
+            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">assignment_turned_in</span>
+                <span class="text-[10px] font-bold">Assess</span>
+            </a>
+            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">medication</span>
+                <span class="text-[10px] font-bold">Meds</span>
+            </a>
+            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">security</span>
+                <span class="text-[10px] font-bold">Risk</span>
+            </a>
+            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl bg-primary-light text-primary border border-blue-100 shadow-sm transition-all group"
+                href="#">
+                <span class="material-symbols-outlined text-[24px] text-primary fill-1">medical_information</span>
+                <span class="text-[10px] font-bold">Plan</span>
+            </a>
+            <div class="px-3 mb-1 mt-2 flex justify-center">
+                <div class="h-0.5 w-8 bg-blue-100/50 rounded-full"></div>
+            </div>
+            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">account_balance_wallet</span>
+                <span class="text-[10px] font-bold">Finance</span>
+            </a>
+            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">calendar_month</span>
+                <span class="text-[10px] font-bold">Schedule</span>
+            </a>
+            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
+                href="#">
+                <span
+                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">contacts</span>
+                <span class="text-[10px] font-bold">Contacts</span>
+            </a>
+        </nav>
+        <div class="p-2 border-t border-blue-100 mt-auto bg-gradient-to-b from-white to-blue-50/30 flex flex-col gap-2">
+            <div class="bg-white rounded-xl p-2 border border-blue-100 shadow-sm flex items-center justify-center"
+                title="On Duty - Day Shift">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                </span>
+            </div>
+            <a class="flex flex-col items-center justify-center p-2 text-text-secondary hover:text-primary transition-colors rounded-lg hover:bg-primary-light/50"
+                href="#" title="Logout">
+                <span class="material-symbols-outlined">logout</span>
+            </a>
+        </div>
+    </aside>
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative bg-background-warm">
+        <header
+            class="h-16 border-b border-blue-100 bg-white/90 backdrop-blur-sm flex items-center justify-between px-6 lg:px-8 flex-shrink-0 z-20 sticky top-0 shadow-sm">
+            <div class="flex items-center gap-4 lg:gap-8 flex-1">
+                <button onclick="toggleSidebar()"
+                    class="lg:hidden p-2 -ml-2 text-text-muted hover:text-primary transition-colors rounded-lg hover:bg-blue-50">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <div class="relative w-full max-w-md hidden md:block group">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span
+                            class="material-symbols-outlined text-text-muted text-[20px] group-focus-within:text-primary transition-colors">search</span>
+                    </span>
+                    <input
+                        class="block w-full pl-10 pr-3 py-2 border border-blue-100 rounded-lg leading-5 bg-blue-50/30 placeholder-text-muted focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary sm:text-sm transition-all duration-200 ease-in-out hover:border-primary/30"
+                        placeholder="Search residents, staff, or notes..." type="text" />
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button
+                    class="relative p-2 rounded-full text-text-secondary hover:bg-primary-light hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span
+                        class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+                <div class="h-8 w-px bg-blue-100 mx-1"></div>
+                <div class="flex items-center gap-3 pl-2">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-text-main">Dr. Sarah W.</p>
+                        <p class="text-xs text-primary font-medium">Unit Manager</p>
+                    </div>
+                    <button
+                        class="bg-center bg-no-repeat bg-cover rounded-full size-10 ring-2 ring-blue-100 hover:ring-primary transition-all cursor-pointer shadow-sm"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_6XWXgb9ABTRzl_T1Yzoq5UO625SJ2MgBvEMxVCi96QCjPdUzmGFPKDV32lzRThbyhMJBDQc68JF1B5Td7DJ9xoGOpTXycG425rHC7sKIBfExyt1nukB7VM78-GGBU3nZNJBVycYp_Iflt5oWnv3Ea93IWnDxSazKSUeqmKV0YMfmdnr82UAu4nixKFDPiWsLOanZm48C5XOuwySpFOEcPokVRP24iXD90ByiJS2_zPcHP4BBnFrdQklC3h_B05OJkeO9aLlqjTOQ");'></button>
+                </div>
+            </div>
+        </header>
+        <div
+            class="h-14 border-b border-blue-100 bg-white flex items-center justify-between px-6 lg:px-8 flex-shrink-0 z-10">
+            <div class="flex items-center gap-2 overflow-hidden">
+                <a class="text-text-muted text-sm font-medium hover:text-primary transition-colors" href="#">Service
+                    User</a>
+                <span class="material-symbols-outlined text-[12px] text-text-muted">chevron_right</span>
+                <a class="text-text-muted text-sm font-medium hover:text-primary transition-colors" href="#">Profile</a>
+                <span class="material-symbols-outlined text-[12px] text-text-muted">chevron_right</span>
+                <span
+                    class="text-primary font-semibold text-sm truncate bg-primary-light px-2 py-0.5 rounded-md border border-primary/10">Arthur
+                    Pendelton</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button
+                    class="hidden sm:flex h-9 items-center justify-center px-4 rounded-lg border border-blue-200 bg-white text-text-secondary text-xs font-bold hover:bg-blue-50 hover:border-primary/30 hover:text-primary transition-all gap-2 shadow-sm">
+                    <span class="material-symbols-outlined text-[18px]">print</span>
+                    <span>Report</span>
+                </button>
+                <button
+                    class="flex h-9 items-center justify-center px-4 rounded-lg bg-primary hover:bg-primary-dark text-white text-xs font-bold transition-all gap-2 shadow-lg shadow-blue-500/20 active:scale-95">
+                    <span class="material-symbols-outlined text-[18px]">edit</span>
+                    <span>Edit Profile</span>
+                </button>
+            </div>
+        </div>
+        <div class="flex-1 overflow-y-auto p-6 lg:p-8 scroll-smooth">
+            <div class="w-full flex justify-center max-w-[1600px] mx-auto">
+                <div class="w-full lg:w-[90%] flex flex-col gap-6">
+                    <div
+                        class="bg-surface-white rounded-2xl border border-blue-100 p-5 shadow-soft flex flex-col md:flex-row items-center gap-6 relative overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 w-64 h-full bg-gradient-to-l from-primary-light/40 to-transparent pointer-events-none">
+                        </div>
+                        <div class="relative flex-shrink-0">
+                            <div class="w-24 h-24 rounded-full border-4 border-white shadow-lg bg-cover bg-center ring-1 ring-blue-50"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDLVtz6EXRZuUCXpYFb0LzgSlYQ9IUwahSZnPukZIJbUgx04Lq62yEJs0TW3zRpUbdi2vD91zRT_6i8cynQAVC1qogQ96Kr09atDACRNlBq0mQivfys40tXe-sXl43RjKFb71fKua6Bf3BAesIWSFXqjg1I5m7gN-22GpGj3DQivuVFAE7Wbsvsrx57ShFAME9uzHd9uyZfqq-1Ee4sdWJiuUUN_xSAxB4nBq00Kb3C0IzwX2_Fg_55Zc_3jK64CT-zfIw2sWS70RXt');">
+                            </div>
+                            <div class="absolute bottom-1 right-1 w-6 h-6 bg-green-500 border-4 border-white rounded-full shadow-sm"
+                                title="Status: Active"></div>
+                        </div>
+                        <div class="flex-1 text-center md:text-left z-10">
+                            <h1 class="text-3xl font-bold text-text-main font-display tracking-tight leading-tight">
+                                Arthur Pendelton</h1>
+                            <div class="flex items-center justify-center md:justify-start gap-2 mt-1.5">
+                                <div
+                                    class="flex items-center gap-1.5 text-text-secondary font-medium bg-background-warm px-2.5 py-1 rounded-full border border-stone-100">
+                                    <span class="material-symbols-outlined text-primary text-[18px]">meeting_room</span>
+                                    <span class="text-sm">Room 304</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 self-stretch md:self-center justify-center z-10 items-center">
+                            <!-- AGE CARD (Blue) -->
+                            <div
+                                class="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex flex-col items-center justify-center w-28 h-28 shadow-sm group hover:border-blue-200 hover:shadow-md transition-all">
+                                <span
+                                    class="text-[10px] font-bold text-blue-500 uppercase tracking-widest mb-1">Age</span>
+                                <span class="text-3xl font-bold text-slate-800 font-display mb-0.5">79</span>
+                                <span class="text-[10px] font-medium text-blue-400">Years</span>
+                            </div>
+
+                            <!-- MOBILITY CARD (Blue) -->
+                            <div
+                                class="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex flex-col items-center justify-center w-28 h-28 shadow-sm group hover:border-blue-200 hover:shadow-md transition-all">
+                                <span
+                                    class="text-[10px] font-bold text-blue-500 uppercase tracking-widest mb-1">Mobility</span>
+                                <div class="flex flex-col items-center leading-none">
+                                    <span class="text-lg font-bold text-slate-800 font-display">Assisted</span>
+                                </div>
+                            </div>
+
+                            <!-- MUST DOS CARD (Red) -->
+                            <div
+                                class="bg-red-50 border border-red-100 rounded-2xl p-4 flex flex-col items-center justify-center w-32 h-32 shadow-sm group hover:border-red-200 hover:shadow-md transition-all scale-105">
+                                <span class="text-[10px] font-bold text-red-500 uppercase tracking-[0.2em] mb-1">Must
+                                    Dos</span>
+                                <span class="text-4xl font-bold text-red-600 font-display mb-0.5">12</span>
+                                <span
+                                    class="text-[10px] font-medium text-red-400 italic text-center leading-tight">Missed
+                                    24h</span>
+                            </div>
+                        </div>
+                    </div>
+                    <details
+                        class="group bg-surface-white rounded-xl border border-blue-100 shadow-card overflow-hidden"
+                        open="">
+                        <summary
+                            class="flex items-center justify-between px-5 py-3 cursor-pointer select-none bg-white hover:bg-slate-50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-primary-light flex items-center justify-center text-primary border border-blue-100">
+                                    <span class="material-symbols-outlined text-[18px]">info</span>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:gap-3">
+                                    <span class="text-sm font-bold text-text-main">Resident Info</span>
+                                    <span
+                                        class="text-[11px] text-text-muted font-normal hidden sm:inline-block bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">Identification,
+                                        Clinical, Finance &amp; Bio</span>
+                                </div>
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-text-muted transition-transform duration-300 group-open:rotate-180 bg-white border border-slate-100 rounded-full p-0.5">expand_more</span>
+                        </summary>
+                        <div
+                            class="border-t border-blue-50 p-6 bg-slate-50/30 animate-in slide-in-from-top-2 fade-in duration-200">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                                <div class="space-y-3">
+                                    <h4
+                                        class="text-xs font-bold text-primary uppercase tracking-wider mb-2 flex items-center gap-1">
+                                        Identification</h4>
+                                    <div
+                                        class="bg-white p-3 rounded-lg border border-blue-50 shadow-sm flex justify-between items-center">
+                                        <span class="text-[10px] text-text-muted uppercase font-bold">DOB</span>
+                                        <span class="text-sm font-bold text-text-main">14 Mar 1945</span>
+                                    </div>
+                                    <div
+                                        class="bg-white p-3 rounded-lg border border-blue-50 shadow-sm flex justify-between items-center">
+                                        <span class="text-[10px] text-text-muted uppercase font-bold">NHS No</span>
+                                        <span class="text-sm font-bold text-text-main">442-551-992</span>
+                                    </div>
+                                    <div
+                                        class="bg-white p-3 rounded-lg border border-blue-50 shadow-sm flex justify-between items-center">
+                                        <span class="text-[10px] text-text-muted uppercase font-bold">NI No</span>
+                                        <span class="text-sm font-bold text-text-main">QQ 12 34 56 A</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-3 lg:col-span-2 flex flex-col">
+                                    <h4 class="text-xs font-bold text-primary uppercase tracking-wider mb-2">Clinical
+                                        Diagnosis &amp; Status</h4>
+                                    <div
+                                        class="bg-white p-4 rounded-lg border border-blue-50 shadow-sm h-full flex flex-col justify-center">
+                                        <div class="flex flex-wrap gap-2 mb-3">
+                                            <span
+                                                class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100 shadow-sm">Self-Funded</span>
+                                            <span
+                                                class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-100 shadow-sm">DoLS</span>
+                                            <span
+                                                class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-orange-50 text-orange-700 border border-orange-100 shadow-sm">DNACPR</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] text-text-muted uppercase font-bold mb-1">Primary
+                                                Diagnosis</p>
+                                            <p class="text-sm font-bold text-text-main leading-relaxed">Vascular
+                                                Dementia, Type 2 Diabetes</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <h4 class="text-xs font-bold text-red-500 uppercase tracking-wider mb-2">Critical
+                                        Alerts</h4>
+                                    <div class="bg-red-50 p-4 rounded-lg border border-red-100 shadow-sm h-full">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span
+                                                class="material-symbols-outlined text-red-500 text-[18px]">warning</span>
+                                            <span class="text-[10px] font-bold text-red-700 uppercase">Allergies</span>
+                                        </div>
+                                        <p class="text-sm font-medium text-text-main">Penicillin (High Risk)</p>
+                                        <p class="text-sm font-medium text-text-main mt-1">Latex</p>
+                                    </div>
+                                </div>
+                                <div class="col-span-1 md:col-span-2 lg:col-span-4 space-y-3 mt-2">
+                                    <div class="flex items-center justify-between">
+                                        <h4
+                                            class="text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-1">
+                                            Biography &amp; Personal Context</h4>
+                                    </div>
+                                    <div
+                                        class="bg-white p-5 rounded-xl border border-blue-50 shadow-sm flex flex-col md:flex-row gap-6 items-start">
+                                        <div class="flex-1">
+                                            <h3
+                                                class="text-lg font-bold text-text-main font-display mb-2 flex items-center gap-2">
+                                                <span class="w-1 h-4 bg-primary rounded-full"></span>
+                                                About Arthur
+                                            </h3>
+                                            <p class="text-text-secondary text-sm leading-relaxed">
+                                                Arthur is a former naval officer who enjoys jazz music and morning walks
+                                                in the garden. He prefers tea over coffee and likes to read historical
+                                                non-fiction. He can be confused in the evenings (Sundowning) but
+                                                responds well to soft music and reassurance.
+                                            </p>
+                                        </div>
+                                        <button
+                                            class="shrink-0 text-primary text-xs font-bold uppercase tracking-wider hover:text-white hover:bg-primary transition-all bg-slate-50 px-3 py-2 rounded-lg border border-blue-100 shadow-sm whitespace-nowrap">View
+                                            Full Bio</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    <div
+                        class="bg-surface-white rounded-2xl border border-blue-100 shadow-soft flex-1 min-h-[400px] flex flex-col">
+                        <div
+                            class="p-4 border-b border-blue-50 flex justify-between items-center bg-gradient-to-r from-white to-primary-light/30 rounded-t-2xl">
+                            <h3 class="text-lg font-bold text-text-main font-display flex items-center gap-2">
+                                <span class="w-1.5 h-6 bg-primary rounded-full"></span> Care Notes
+                            </h3>
+                            <button
+                                class="flex items-center gap-1.5 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Note
+                            </button>
+                        </div>
+                        <div class="p-5 space-y-6 flex-1">
+                            <div class="flex gap-4 group">
+                                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 flex-shrink-0 ring-2 ring-blue-100 shadow-sm"
+                                    data-alt="Avatar of nurse Sarah"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_6XWXgb9ABTRzl_T1Yzoq5UO625SJ2MgBvEMxVCi96QCjPdUzmGFPKDV32lzRThbyhMJBDQc68JF1B5Td7DJ9xoGOpTXycG425rHC7sKIBfExyt1nukB7VM78-GGBU3nZNJBVycYp_Iflt5oWnv3Ea93IWnDxSazKSUeqmKV0YMfmdnr82UAu4nixKFDPiWsLOanZm48C5XOuwySpFOEcPokVRP24iXD90ByiJS2_zPcHP4BBnFrdQklC3h_B05OJkeO9aLlqjTOQ");'>
+                                </div>
+                                <div class="flex flex-col gap-1 w-full">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <p class="text-text-main text-sm font-bold">Sarah Jenkins <span
+                                                    class="text-text-muted font-normal ml-2 text-xs bg-slate-100 px-2 py-0.5 rounded-full">Senior
+                                                    Nurse</span></p>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <p class="text-text-muted text-xs font-medium">Today, 09:30 AM</p>
+                                            <div
+                                                class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                <button
+                                                    class="p-1 hover:bg-slate-100 rounded text-text-muted hover:text-primary transition-colors"
+                                                    title="Attachment">
+                                                    <span
+                                                        class="material-symbols-outlined text-[16px]">attach_file</span>
+                                                </button>
+                                                <button
+                                                    class="p-1 hover:bg-slate-100 rounded text-text-muted hover:text-primary transition-colors"
+                                                    title="Edit">
+                                                    <span class="material-symbols-outlined text-[16px]">edit</span>
+                                                </button>
+                                                <button
+                                                    class="p-1 hover:bg-red-50 rounded text-text-muted hover:text-red-500 transition-colors"
+                                                    title="Delete">
+                                                    <span class="material-symbols-outlined text-[16px]">delete</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="bg-slate-50/50 p-4 rounded-xl border border-blue-50 mt-1 shadow-sm group-hover:bg-primary-light group-hover:border-blue-200 transition-colors">
+                                        <p class="text-text-secondary text-sm leading-relaxed">Administered morning
+                                            medications. Arthur is in good spirits today, enjoyed a full breakfast. No
+                                            signs of agitation.</p>
+                                    </div>
+                                    <div class="flex gap-2 mt-1.5">
+                                        <span
+                                            class="px-2.5 py-0.5 bg-blue-50 text-blue-600 text-[10px] rounded border border-blue-100 uppercase font-bold tracking-wider">Routine</span>
+                                        <span
+                                            class="px-2.5 py-0.5 bg-green-50 text-green-600 text-[10px] rounded border border-green-100 uppercase font-bold tracking-wider">Mood:
+                                            Stable</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 group">
+                                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 flex-shrink-0 ring-2 ring-slate-100 shadow-sm"
+                                    data-alt="Avatar of carer David"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC7mrsthXC0vZDhkyjMYCLoKlpl8qtgJX_dRWpTP4HVx6wGcznCmcNFinLXMGU4YuwDh34FkA09Vw4yRd0oruZHr1RCqMoPRjSbyuVAep9eiql2RNvawQp75q1by3EFMAFvaKDmKosZUj_V7_2oi_nS1CtlEiB5Z30XfZAvDYY4gTHSUAKvjQZ7vS9ymFiRlpFUYpSM6hudq5ixk_wLlvF1q0ST60ScVozQ-X-nB4BlQgLdVLSTSWLKZ-jiePh9wF-_2gsWhFCAy833");'>
+                                </div>
+                                <div class="flex flex-col gap-1 w-full">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <p class="text-text-main text-sm font-bold">David Chen <span
+                                                    class="text-text-muted font-normal ml-2 text-xs bg-slate-100 px-2 py-0.5 rounded-full">Care
+                                                    Assistant</span></p>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <p class="text-text-muted text-xs font-medium">Yesterday, 08:15 PM</p>
+                                            <div
+                                                class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                <button
+                                                    class="p-1 hover:bg-slate-100 rounded text-text-muted hover:text-primary transition-colors"
+                                                    title="Attachment">
+                                                    <span
+                                                        class="material-symbols-outlined text-[16px]">attach_file</span>
+                                                </button>
+                                                <button
+                                                    class="p-1 hover:bg-slate-100 rounded text-text-muted hover:text-primary transition-colors"
+                                                    title="Edit">
+                                                    <span class="material-symbols-outlined text-[16px]">edit</span>
+                                                </button>
+                                                <button
+                                                    class="p-1 hover:bg-red-50 rounded text-text-muted hover:text-red-500 transition-colors"
+                                                    title="Delete">
+                                                    <span class="material-symbols-outlined text-[16px]">delete</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="bg-slate-50/50 p-4 rounded-xl border border-slate-100 mt-1 shadow-sm group-hover:bg-slate-50 group-hover:border-slate-200 transition-colors">
+                                        <p class="text-text-secondary text-sm leading-relaxed">Assisted with evening
+                                            routine. Arthur mentioned some mild discomfort in his left knee after the
+                                            walk. Applied heat pack as per care plan.</p>
+                                    </div>
+                                    <div class="flex gap-2 mt-1.5">
+                                        <span
+                                            class="px-2.5 py-0.5 bg-blue-50 text-blue-600 text-[10px] rounded border border-blue-100 uppercase font-bold tracking-wider">Physical
+                                            Health</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="p-2 border-t border-blue-50 bg-slate-50 flex items-center justify-center rounded-b-2xl">
+                            <button
+                                class="w-full text-[10px] text-text-muted font-bold uppercase tracking-widest hover:text-primary transition-colors text-center py-1.5">
+                                See More
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-6">
+
+                        <div class="bg-surface-white rounded-2xl border border-blue-100 shadow-card overflow-hidden">
+                            <div
+                                class="p-4 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
+                                <h3 class="text-text-main font-semibold text-sm font-display">Appointments (4)</h3>
+                                <button
+                                    class="flex items-center gap-1.5 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                    <span class="material-symbols-outlined text-[16px]">add</span> Add
+                                </button>
+                            </div>
+                            <div
+                                class="p-5 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+                                <div class="relative pl-2">
+                                    <div class="absolute left-[7px] top-2 bottom-2 w-0.5 bg-blue-100"></div>
+                                    <div class="relative flex gap-4 mb-6 opacity-60 grayscale">
+                                        <div
+                                            class="w-4 h-4 rounded-full bg-slate-200 border-2 border-white z-10 shrink-0 mt-0.5">
+                                        </div>
+                                        <div>
+                                            <p class="text-text-muted text-xs mb-0.5">09:00 AM</p>
+                                            <p class="text-text-secondary text-sm font-medium line-through">Breakfast
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex gap-4 mb-6">
+                                        <div
+                                            class="w-4 h-4 rounded-full bg-primary border-2 border-white ring-4 ring-blue-50 z-10 shrink-0 mt-0.5 shadow-md">
+                                        </div>
+                                        <div
+                                            class="bg-gradient-to-r from-primary-light to-white border border-blue-100 p-3 -m-2 rounded-xl w-full shadow-sm">
+                                            <div class="flex justify-between items-start">
+                                                <p class="text-primary-dark text-xs mb-0.5 font-bold">10:00 AM</p>
+                                                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                                            </div>
+                                            <p class="text-text-main text-sm font-bold">Physiotherapy Session</p>
+                                            <p class="text-text-secondary text-xs mt-1 flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">location_on</span>
+                                                Gym
+                                                Room A
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex gap-4 mb-6">
+                                        <div
+                                            class="w-4 h-4 rounded-full bg-white border-2 border-slate-300 z-10 shrink-0 mt-0.5">
+                                        </div>
+                                        <div>
+                                            <p class="text-text-muted text-xs mb-0.5">12:30 PM</p>
+                                            <p class="text-text-main text-sm font-medium">Lunch</p>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex gap-4">
+                                        <div
+                                            class="w-4 h-4 rounded-full bg-white border-2 border-slate-300 z-10 shrink-0 mt-0.5">
+                                        </div>
+                                        <div>
+                                            <p class="text-text-muted text-xs mb-0.5">03:00 PM</p>
+                                            <p class="text-text-main text-sm font-medium">Family Visit (Daughter)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-2 border-t border-blue-50 bg-slate-50 flex items-center justify-center">
+                                <button
+                                    class="w-full text-[10px] text-text-muted font-bold uppercase tracking-widest hover:text-primary transition-colors text-center py-1.5">
+                                    Load More
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-surface-white rounded-2xl border border-blue-100 shadow-card overflow-hidden">
+                            <div
+                                class="p-4 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
+                                <h3 class="text-text-main font-semibold text-sm font-display">To-Do List (3)</h3>
+                                <button
+                                    class="flex items-center gap-1 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-2 py-1 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                    <span class="material-symbols-outlined text-[16px]">add</span>
+                                    Add Task
+                                </button>
+                            </div>
+                            <div class="p-5 space-y-3 flex-1">
+                                <label
+                                    class="flex items-start gap-3 cursor-pointer group p-2 hover:bg-blue-50/50 rounded-lg -mx-2 transition-colors border border-transparent hover:border-blue-100/50">
+                                    <input checked=""
+                                        class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 bg-white"
+                                        type="checkbox" />
+                                    <span
+                                        class="text-text-muted text-sm line-through group-hover:text-text-secondary transition-colors decoration-slate-400">Check
+                                        fluid intake logs</span>
+                                    <button
+                                        class="ml-auto text-text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all p-1 rounded-full hover:bg-blue-50"
+                                        title="View Details" type="button">
+                                        <span
+                                            class="material-symbols-outlined text-[18px] translate-y-[1px]">chevron_right</span>
+                                    </button>
+                                </label>
+                                <label
+                                    class="flex items-start gap-3 cursor-pointer group p-2 hover:bg-blue-50/50 rounded-lg -mx-2 transition-colors border border-transparent hover:border-blue-100/50">
+                                    <input
+                                        class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 bg-white"
+                                        type="checkbox" />
+                                    <span
+                                        class="text-text-main text-sm group-hover:text-primary transition-colors font-medium">Update
+                                        risk assessment</span>
+                                    <button
+                                        class="ml-auto text-text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all p-1 rounded-full hover:bg-blue-50"
+                                        title="View Details" type="button">
+                                        <span
+                                            class="material-symbols-outlined text-[18px] translate-y-[1px]">chevron_right</span>
+                                    </button>
+                                </label>
+                                <label
+                                    class="flex items-start gap-3 cursor-pointer group p-2 hover:bg-blue-50/50 rounded-lg -mx-2 transition-colors border border-transparent hover:border-blue-100/50">
+                                    <input
+                                        class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20 bg-white"
+                                        type="checkbox" />
+                                    <span
+                                        class="text-text-main text-sm group-hover:text-primary transition-colors font-medium">Call
+                                        Pharmacy regarding refill</span>
+                                    <button
+                                        class="ml-auto text-text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all p-1 rounded-full hover:bg-blue-50"
+                                        title="View Details" type="button">
+                                        <span
+                                            class="material-symbols-outlined text-[18px] translate-y-[1px]">chevron_right</span>
+                                    </button>
+                                </label>
+                            </div>
+                            <div class="p-2 border-t border-blue-50 bg-slate-50 flex items-center justify-center">
+                                <button
+                                    class="w-full text-[10px] text-text-muted font-bold uppercase tracking-widest hover:text-primary transition-colors text-center py-1.5">
+                                    See More
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-surface-white rounded-2xl border border-blue-100 shadow-soft flex flex-col relative overflow-hidden min-h-[500px]">
+                        <input checked="" class="hidden" id="tab-fluid" name="health_tabs" type="radio" />
+
+                        <input class="hidden" id="tab-nutrition" name="health_tabs" type="radio" />
+                        <div
+                            class="px-4 py-4 border-b border-blue-50 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gradient-to-r from-white to-primary-light/30">
+                            <h3 class="text-lg font-bold text-text-main font-display flex items-center gap-2">
+                                <span class="w-1.5 h-6 bg-primary rounded-full"></span> Health Logs
+                            </h3>
+                            <div class="flex p-1 bg-slate-100 rounded-lg border border-slate-200">
+                                <label
+                                    class="label-fluid px-4 py-1.5 text-xs font-bold uppercase tracking-wide rounded-md cursor-pointer transition-all text-text-muted hover:text-text-secondary select-none border border-transparent"
+                                    for="tab-fluid">
+                                    Fluid Balance
+                                </label>
+
+                                <label
+                                    class="label-nutrition px-4 py-1.5 text-xs font-bold uppercase tracking-wide rounded-md cursor-pointer transition-all text-text-muted hover:text-text-secondary select-none border border-transparent"
+                                    for="tab-nutrition">
+                                    Nutrition Log
+                                </label>
+                            </div>
+                        </div>
+                        <div class="content-fluid hidden p-5 flex-1 animate-in fade-in slide-in-from-bottom-2">
+                            <div class="flex justify-between items-center mb-6">
+                                <div class="text-sm font-medium text-text-muted">Tracking hydration levels for today
+                                </div>
+                                <button
+                                    class="flex items-center gap-1.5 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                    <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Entry
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                                <div
+                                    class="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-sm group hover:border-blue-200 transition-all">
+                                    <span class="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">Total
+                                        Intake</span>
+                                    <span class="text-2xl font-bold text-text-main font-display">1,850 ml</span>
+                                    <span class="text-[10px] text-text-muted mt-0.5">Target: 2,000 ml</span>
+                                </div>
+                                <div
+                                    class="bg-slate-50 border border-slate-100 rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-sm group hover:border-slate-200 transition-all">
+                                    <span
+                                        class="text-[10px] font-bold text-text-secondary uppercase tracking-wider mb-1">Total
+                                        Output</span>
+                                    <span class="text-2xl font-bold text-text-main font-display">1,200 ml</span>
+                                    <span class="text-[10px] text-text-muted mt-0.5">Last: 1 hour ago</span>
+                                </div>
+                                <div
+                                    class="bg-green-50/50 border border-green-100 rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-sm group hover:border-green-200 transition-all">
+                                    <span class="text-[10px] font-bold text-green-600 uppercase tracking-wider mb-1">Net
+                                        Balance</span>
+                                    <span class="text-2xl font-bold text-green-700 font-display">+650 ml</span>
+                                    <span class="text-[10px] text-green-600/70 mt-0.5 font-medium">Positive</span>
+                                </div>
+                            </div>
+                            <h4 class="text-xs font-bold text-text-muted uppercase tracking-wider mb-3 pl-1">Recent
+                                Activity</h4>
+                            <div class="space-y-3">
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center border border-blue-100 group-hover:bg-blue-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">water_drop</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Water</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                14:30 PM
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span class="text-sm font-bold text-text-main">250 ml</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 mt-0.5">Intake</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 group-hover:bg-amber-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">local_cafe</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Tea (Black)</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                10:15 AM
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span class="text-sm font-bold text-text-main">300 ml</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 mt-0.5">Intake</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-slate-50 text-slate-500 flex items-center justify-center border border-slate-100 group-hover:bg-slate-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">opacity</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Urine Output</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                08:00 AM
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span class="text-sm font-bold text-text-main">450 ml</span>
+                                        <span
+                                            class="text-[10px] font-bold uppercase tracking-wider text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded border border-orange-100 mt-0.5">Output</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-nutrition hidden p-5 flex-1 animate-in fade-in slide-in-from-bottom-2">
+                            <div class="flex justify-between items-center mb-6">
+                                <div class="text-sm font-medium text-text-muted">Daily dietary intake and monitoring
+                                </div>
+                                <button
+                                    class="flex items-center gap-1.5 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                    <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Entry
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                                <div
+                                    class="bg-orange-50/50 border border-orange-100 rounded-xl p-4 flex flex-col justify-center shadow-sm hover:border-orange-200 transition-all">
+                                    <span
+                                        class="text-[10px] font-bold text-orange-600 uppercase tracking-wider mb-1">Daily
+                                        Calories</span>
+                                    <span class="text-2xl font-bold text-text-main font-display">1,450 kcal</span>
+                                    <div class="w-full bg-orange-100 rounded-full h-1.5 mt-2">
+                                        <div class="bg-orange-500 h-1.5 rounded-full" style="width: 72%"></div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-green-50/50 border border-green-100 rounded-xl p-4 flex flex-col justify-center shadow-sm hover:border-green-200 transition-all">
+                                    <span
+                                        class="text-[10px] font-bold text-green-600 uppercase tracking-wider mb-1">Last
+                                        Meal</span>
+                                    <span class="text-lg font-bold text-text-main font-display">12:45 PM</span>
+                                    <span class="text-[10px] text-text-muted mt-0.5">Lunch - Consumed</span>
+                                </div>
+                            </div>
+                            <h4 class="text-xs font-bold text-text-muted uppercase tracking-wider mb-3 pl-1">Recent
+                                Intake</h4>
+                            <div class="space-y-3">
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center border border-orange-100 group-hover:bg-orange-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">restaurant</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Chicken Roast</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                12:45 • Main Meal
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span
+                                            class="text-xs font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full">100%
+                                            Eaten</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 group-hover:bg-blue-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">icecream</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Fruit Yogurt</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                10:30 • Snack
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span
+                                            class="text-xs font-bold text-green-700 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full">Consumed</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between p-3 rounded-xl border border-blue-50 bg-white hover:border-blue-100 hover:shadow-sm transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-slate-50 text-slate-500 flex items-center justify-center border border-slate-100 group-hover:bg-slate-100 transition-colors shadow-sm">
+                                            <span class="material-symbols-outlined text-[20px]">breakfast_dining</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main">Porridge &amp; Toast</p>
+                                            <p class="text-xs text-text-muted font-medium flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                08:00 • Texture-mod
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span
+                                            class="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">80%
+                                            Eaten</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-2 border-t border-blue-50 bg-slate-50 flex items-center justify-center mt-auto">
+                            <button
+                                class="w-full text-[10px] text-text-muted font-bold uppercase tracking-widest hover:text-primary transition-colors text-center py-1.5">
+                                See More
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-col lg:flex-row gap-6 mt-6">
+                        <!-- MEDICATIONS SECTION (MOVED) -->
+                        <div class="w-full lg:w-1/2 flex flex-col">
+                            <div
+                                class="bg-surface-white rounded-2xl p-0 border border-blue-100 shadow-card overflow-hidden flex-1 flex flex-col">
+                                <div
+                                    class="p-3 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
+                                    <h3 class="text-text-main font-bold text-sm font-display">Medications</h3>
+                                    <div
+                                        class="flex items-center bg-white rounded-lg border border-blue-200 shadow-sm p-0.5">
+                                        <button
+                                            class="w-6 h-6 flex items-center justify-center rounded hover:bg-blue-50 text-blue-400 hover:text-primary transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">chevron_left</span>
+                                        </button>
+                                        <span
+                                            class="text-[10px] font-bold text-text-main px-2 cursor-pointer select-none">Today</span>
+                                        <button
+                                            class="w-6 h-6 flex items-center justify-center rounded hover:bg-blue-50 text-blue-400 hover:text-primary transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col bg-white relative flex-1 overflow-y-auto">
+                                    <div onclick="toggleMedSection('meds-morning', 'icon-morning')"
+                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-b border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm cursor-pointer hover:bg-blue-100/50 transition-colors">
+                                        <div class="flex items-center gap-2">
+                                            <span id="icon-morning"
+                                                class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
+                                            <span
+                                                class="material-symbols-outlined text-amber-500 text-[16px]">wb_sunny</span>
+                                            <span
+                                                class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Morning
+                                                (2)</span>
+                                        </div>
+                                        <span
+                                            class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">06:00
+                                            - 12:00</span>
+                                    </div>
+                                    <div id="meds-morning">
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-primary-light/10 transition-colors cursor-pointer px-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-white group-hover:border-green-300 transition-colors shadow-sm">
+                                                    <span
+                                                        class="material-symbols-outlined text-[16px]">check_circle</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Paracetamol</p>
+                                                    <p class="text-text-muted text-xs">1g • Oral</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <span
+                                                    class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">08:00</span>
+                                                <span
+                                                    class="text-green-600 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Given</span>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-primary-light/10 transition-colors cursor-pointer px-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center border border-green-100 group-hover:bg-white group-hover:border-green-300 transition-colors shadow-sm">
+                                                    <span
+                                                        class="material-symbols-outlined text-[16px]">check_circle</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Atorvastatin</p>
+                                                    <p class="text-text-muted text-xs">20mg • Oral</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <span
+                                                    class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">08:00</span>
+                                                <span
+                                                    class="text-green-600 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Given</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div onclick="toggleMedSection('meds-afternoon', 'icon-afternoon')"
+                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm cursor-pointer hover:bg-blue-100/50 transition-colors">
+                                        <div class="flex items-center gap-2">
+                                            <span id="icon-afternoon"
+                                                class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
+                                            <span
+                                                class="material-symbols-outlined text-orange-500 text-[16px]">light_mode</span>
+                                            <span
+                                                class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Afternoon
+                                                (1)</span>
+                                        </div>
+                                        <span
+                                            class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">12:00
+                                            - 16:00</span>
+                                    </div>
+                                    <div id="meds-afternoon">
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-amber-50/30 transition-colors cursor-pointer px-4 bg-amber-50/10">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Metformin</p>
+                                                    <p class="text-text-muted text-xs">500mg • With Lunch</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-1.5">
+                                                <button
+                                                    class="w-7 h-7 rounded-md border border-red-200 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center transition-all shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">close</span>
+                                                </button>
+                                                <button
+                                                    class="w-7 h-7 rounded-md border border-green-200 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-500 flex items-center justify-center transition-all shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">check</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div onclick="toggleMedSection('meds-evening', 'icon-evening')"
+                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm cursor-pointer hover:bg-blue-100/50 transition-colors">
+                                        <div class="flex items-center gap-2">
+                                            <span id="icon-evening"
+                                                class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
+                                            <span
+                                                class="material-symbols-outlined text-indigo-400 text-[16px]">nights_stay</span>
+                                            <span
+                                                class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Evening
+                                                (1)</span>
+                                        </div>
+                                        <span
+                                            class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">16:00
+                                            - 19:00</span>
+                                    </div>
+                                    <div id="meds-evening">
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-red-50 transition-colors cursor-pointer px-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center border border-red-100 group-hover:bg-white group-hover:border-red-300 transition-colors shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">cancel</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Amlodipine</p>
+                                                    <p class="text-text-muted text-xs">10mg • Oral</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <span
+                                                    class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-transparent transition-all">17:00</span>
+                                                <span
+                                                    class="text-red-500 text-[10px] mt-0.5 flex items-center gap-0.5 font-bold">Refused</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div onclick="toggleMedSection('meds-night', 'icon-night')"
+                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm cursor-pointer hover:bg-blue-100/50 transition-colors">
+                                        <div class="flex items-center gap-2">
+                                            <span id="icon-night"
+                                                class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
+                                            <span
+                                                class="material-symbols-outlined text-slate-500 text-[16px]">bedtime</span>
+                                            <span
+                                                class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Night
+                                                (2)</span>
+                                        </div>
+                                        <span
+                                            class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">19:00
+                                            - 23:59</span>
+                                    </div>
+                                    <div id="meds-night">
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-amber-50/30 transition-colors cursor-pointer px-4 bg-amber-50/10">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Donepezil</p>
+                                                    <p class="text-text-muted text-xs">10mg • Bedtime</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-1.5">
+                                                <button
+                                                    class="w-7 h-7 rounded-md border border-red-200 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center transition-all shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">close</span>
+                                                </button>
+                                                <button
+                                                    class="w-7 h-7 rounded-md border border-green-200 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-500 flex items-center justify-center transition-all shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">check</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="p-3 border-b border-blue-50 flex items-center justify-between group hover:bg-blue-50 transition-colors cursor-pointer px-4">
+                                            <div class="flex items-center gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-slate-50 text-slate-500 flex items-center justify-center border border-slate-200 group-hover:bg-white group-hover:border-primary/50 group-hover:text-primary transition-colors shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">pill</span>
+                                                </div>
+                                                <div>
+                                                    <p class="text-text-main text-sm font-bold">Zopiclone</p>
+                                                    <p class="text-text-muted text-xs">3.75mg • PRN</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <span
+                                                    class="text-text-secondary text-[10px] font-bold bg-slate-100 px-1.5 py-0.5 rounded group-hover:bg-white border border-transparent group-hover:border-blue-100 transition-all">PRN</span>
+                                                <span class="text-text-muted text-[9px] mt-0.5 font-medium">As
+                                                    Needed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div onclick="toggleMedSection('meds-midnight', 'icon-midnight')"
+                                        class="sticky top-0 z-20 bg-blue-50/95 backdrop-blur-sm border-y border-blue-100 px-4 py-2 flex justify-between items-center shadow-sm cursor-pointer hover:bg-blue-100/50 transition-colors">
+                                        <div class="flex items-center gap-2">
+                                            <span id="icon-midnight"
+                                                class="material-symbols-outlined text-[16px] transition-transform duration-200">expand_more</span>
+                                            <span
+                                                class="material-symbols-outlined text-indigo-800 text-[16px]">dark_mode</span>
+                                            <span
+                                                class="text-[10px] font-bold uppercase tracking-widest text-primary-dark">Mid-night
+                                                (0)</span>
+                                        </div>
+                                        <span
+                                            class="text-[9px] font-semibold text-text-muted bg-white px-1.5 py-0.5 rounded border border-blue-100">00:00
+                                            - 06:00</span>
+                                    </div>
+                                    <div id="meds-midnight">
+                                        <div class="p-8 text-center bg-slate-50/30">
+                                            <p class="text-xs text-text-muted font-medium italic">No scheduled
+                                                medications
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-2 border-t border-blue-50 bg-slate-50 flex items-center justify-center">
+                                    <button
+                                        class="w-full text-[10px] text-text-muted font-bold uppercase tracking-widest hover:text-primary transition-colors text-center py-1.5">
+                                        View Full History
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- VITALS SECTION (WRAPPED) -->
+                        <div class="w-full lg:w-1/2 flex flex-col gap-6">
+                            <div
+                                class="bg-surface-white rounded-2xl border border-blue-100 shadow-soft flex flex-col overflow-hidden">
+                                <div
+                                    class="p-4 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
+                                    <h3 class="text-text-main font-semibold text-sm font-display">Latest Vital Signs
+                                    </h3>
+                                    <button
+                                        class="flex items-center gap-1.5 text-xs text-primary hover:text-white hover:bg-primary font-bold uppercase tracking-wide transition-all bg-white px-3 py-1.5 rounded-lg border border-blue-100 shadow-sm active:scale-95">
+                                        <span class="material-symbols-outlined text-[16px]">add_circle</span> Add Vitals
+                                    </button>
+                                </div>
+                                <div class="p-5 relative group">
+                                    <button onclick="scrollSection('vitals-container', 'left')"
+                                        class="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md border border-blue-100 text-primary transition-all opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95">
+                                        <span class="material-symbols-outlined">chevron_left</span>
+                                    </button>
+                                    <button onclick="scrollSection('vitals-container', 'right')"
+                                        class="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md border border-blue-100 text-primary transition-all opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95">
+                                        <span class="material-symbols-outlined">chevron_right</span>
+                                    </button>
+                                    <div id="vitals-container"
+                                        class="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+                                        <div
+                                            class="w-40 flex-shrink-0 bg-white border border-blue-100 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-primary/30 hover:shadow-md transition-all group h-full snap-start">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 group-hover:bg-primary group-hover:text-white transition-colors">
+                                                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                                </div>
+                                                <span
+                                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-600 border border-green-100">Normal</span>
+                                            </div>
+                                            <div>
+                                                <span
+                                                    class="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">Blood
+                                                    Pressure</span>
+                                                <div class="flex items-baseline gap-1">
+                                                    <span
+                                                        class="text-xl font-bold text-text-main font-display">120/80</span>
+                                                    <span class="text-xs text-text-muted font-medium">mmHg</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-text-muted font-medium">
+                                                <div class="flex items-center gap-1.5">
+                                                    <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                    <span>24 Oct, 09:15</span>
+                                                </div>
+                                                <button
+                                                    class="text-text-muted hover:text-primary transition-colors p-1 -mr-1 rounded-full hover:bg-blue-50">
+                                                    <span class="material-symbols-outlined text-[14px]">edit</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="w-40 flex-shrink-0 bg-white border border-blue-100 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-primary/30 hover:shadow-md transition-all group h-full snap-start">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center border border-rose-100 group-hover:bg-rose-500 group-hover:text-white transition-colors">
+                                                    <span class="material-symbols-outlined text-[18px]">ecg_heart</span>
+                                                </div>
+                                                <span
+                                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-600 border border-green-100">Normal</span>
+                                            </div>
+                                            <div>
+                                                <span
+                                                    class="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">Heart
+                                                    Rate</span>
+                                                <div class="flex items-baseline gap-1">
+                                                    <span
+                                                        class="text-xl font-bold text-text-main font-display">72</span>
+                                                    <span class="text-xs text-text-muted font-medium">bpm</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-text-muted font-medium">
+                                                <div class="flex items-center gap-1.5">
+                                                    <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                    <span>24 Oct, 09:15</span>
+                                                </div>
+                                                <button
+                                                    class="text-text-muted hover:text-primary transition-colors p-1 -mr-1 rounded-full hover:bg-blue-50">
+                                                    <span class="material-symbols-outlined text-[14px]">edit</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="w-40 flex-shrink-0 bg-white border border-blue-100 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-primary/30 hover:shadow-md transition-all group h-full snap-start">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-cyan-50 text-cyan-600 flex items-center justify-center border border-cyan-100 group-hover:bg-cyan-500 group-hover:text-white transition-colors">
+                                                    <span class="material-symbols-outlined text-[18px]">air</span>
+                                                </div>
+                                                <span
+                                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-600 border border-green-100">Normal</span>
+                                            </div>
+                                            <div>
+                                                <span
+                                                    class="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">Oxygen
+                                                    Sat</span>
+                                                <div class="flex items-baseline gap-1">
+                                                    <span
+                                                        class="text-xl font-bold text-text-main font-display">98</span>
+                                                    <span class="text-xs text-text-muted font-medium">%</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-text-muted font-medium">
+                                                <div class="flex items-center gap-1.5">
+                                                    <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                    <span>24 Oct, 09:15</span>
+                                                </div>
+                                                <button
+                                                    class="text-text-muted hover:text-primary transition-colors p-1 -mr-1 rounded-full hover:bg-blue-50">
+                                                    <span class="material-symbols-outlined text-[14px]">edit</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="w-40 flex-shrink-0 bg-white border border-blue-100 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-primary/30 hover:shadow-md transition-all group h-full snap-start">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center border border-orange-100 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                                                    <span
+                                                        class="material-symbols-outlined text-[18px]">thermostat</span>
+                                                </div>
+                                                <span
+                                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100">Elevated</span>
+                                            </div>
+                                            <div>
+                                                <span
+                                                    class="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">Temperature</span>
+                                                <div class="flex items-baseline gap-1">
+                                                    <span
+                                                        class="text-xl font-bold text-text-main font-display">38.2</span>
+                                                    <span class="text-xs text-text-muted font-medium">°C</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-text-muted font-medium">
+                                                <div class="flex items-center gap-1.5">
+                                                    <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                    <span>24 Oct, 08:30</span>
+                                                </div>
+                                                <button
+                                                    class="text-text-muted hover:text-primary transition-colors p-1 -mr-1 rounded-full hover:bg-blue-50">
+                                                    <span class="material-symbols-outlined text-[14px]">edit</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="w-40 flex-shrink-0 bg-white border border-blue-100 rounded-xl p-4 flex flex-col justify-between shadow-sm hover:border-primary/30 hover:shadow-md transition-all group h-full snap-start">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center border border-purple-100 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                                                    <span
+                                                        class="material-symbols-outlined text-[18px]">water_drop</span>
+                                                </div>
+                                                <span
+                                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-red-50 text-red-600 border border-red-100">Danger</span>
+                                            </div>
+                                            <div>
+                                                <span
+                                                    class="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">Glucose</span>
+                                                <div class="flex items-baseline gap-1">
+                                                    <span
+                                                        class="text-xl font-bold text-text-main font-display">16.5</span>
+                                                    <span class="text-xs text-text-muted font-medium">mmol/L</span>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="mt-3 pt-3 border-t border-slate-50 flex items-center justify-between text-[10px] text-text-muted font-medium">
+                                                <div class="flex items-center gap-1.5">
+                                                    <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                                    <span>24 Oct, 07:00</span>
+                                                </div>
+                                                <button
+                                                    class="text-text-muted hover:text-primary transition-colors p-1 -mr-1 rounded-full hover:bg-blue-50">
+                                                    <span class="material-symbols-outlined text-[14px]">edit</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-surface-white rounded-2xl border border-blue-100 shadow-card overflow-hidden">
+                                <div
+                                    class="p-4 border-b border-blue-50 bg-primary-light/30 flex justify-between items-center">
+                                    <h3 class="text-text-main font-semibold text-sm font-display">Activities</h3>
+                                </div>
+                                <div class="p-5 relative group">
+                                    <button onclick="scrollSection('activities-container', 'left')"
+                                        class="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md border border-blue-100 text-primary transition-all opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95">
+                                        <span class="material-symbols-outlined">chevron_left</span>
+                                    </button>
+                                    <button onclick="scrollSection('activities-container', 'right')"
+                                        class="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md border border-blue-100 text-primary transition-all opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95">
+                                        <span class="material-symbols-outlined">chevron_right</span>
+                                    </button>
+                                    <div id="activities-container"
+                                        class="flex gap-4 overflow-x-auto pb-6 snap-x scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+                                        <button
+                                            class="flex-shrink-0 w-32 bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32 snap-start">
+                                            <div
+                                                class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
+                                                <span class="material-symbols-outlined">directions_walk</span>
+                                            </div>
+                                            <div class="flex flex-col items-center justify-center">
+                                                <span
+                                                    class="text-xs font-bold text-text-main group-hover:text-primary-dark">Walk</span>
+                                                <span
+                                                    class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Morning
+                                                    Routine</span>
+                                            </div>
+                                        </button>
+                                        <button
+                                            class="flex-shrink-0 w-32 bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32 snap-start">
+                                            <div
+                                                class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
+                                                <span class="material-symbols-outlined">music_note</span>
+                                            </div>
+                                            <div class="flex flex-col items-center justify-center">
+                                                <span
+                                                    class="text-xs font-bold text-text-main group-hover:text-primary-dark">Music</span>
+                                                <span
+                                                    class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Selection:<br />Classical</span>
+                                            </div>
+                                        </button>
+                                        <button
+                                            class="flex-shrink-0 w-32 bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32 snap-start">
+                                            <div
+                                                class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
+                                                <span class="material-symbols-outlined">menu_book</span>
+                                            </div>
+                                            <div class="flex flex-col items-center justify-center">
+                                                <span
+                                                    class="text-xs font-bold text-text-main group-hover:text-primary-dark">Read</span>
+                                                <span
+                                                    class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Book:<br />Gatsby</span>
+                                            </div>
+                                        </button>
+                                        <button
+                                            class="flex-shrink-0 w-32 bg-white hover:bg-blue-50 border border-blue-100 hover:border-primary/50 group rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all shadow-card hover:shadow-lg hover:-translate-y-1 duration-200 h-32 snap-start">
+                                            <div
+                                                class="w-12 h-12 rounded-full bg-primary-light flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors text-primary shrink-0 shadow-sm">
+                                                <span class="material-symbols-outlined">accessibility_new</span>
+                                            </div>
+                                            <div class="flex flex-col items-center justify-center">
+                                                <span
+                                                    class="text-xs font-bold text-text-main group-hover:text-primary-dark">Physio</span>
+                                                <span
+                                                    class="text-[10px] text-text-muted mt-1 text-center leading-tight opacity-70 group-hover:opacity-100 transition-opacity">Exercises:<br />Leg
+                                                    Lifts</span>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </main>
+
+    <script>
+        function scrollSection(containerId, direction) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const scrollAmount = 200;
+            if (direction === 'left') {
+                container.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            } else {
+                container.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function toggleMedSection(contentId, iconId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(iconId);
+            if (!content || !icon) return;
+
+            content.classList.toggle('hidden');
+            if (content.classList.contains('hidden')) {
+                icon.style.transform = 'rotate(-90deg)';
+                content.classList.remove('animate-in', 'fade-in', 'slide-in-from-top-2');
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+                content.classList.add('animate-in', 'fade-in', 'slide-in-from-top-2');
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+
+            if (sidebar.classList.contains('-translate-x-full')) {
+                // Open sidebar
+                sidebar.classList.remove('-translate-x-full');
+
+                // Show backdrop
+                backdrop.classList.remove('hidden');
+                // Small delay to allow display:block to apply before opacity transition
+                setTimeout(() => {
+                    backdrop.classList.remove('opacity-0');
+                }, 10);
+            } else {
+                // Close sidebar
+                sidebar.classList.add('-translate-x-full');
+
+                // Hide backdrop
+                backdrop.classList.add('opacity-0');
+                setTimeout(() => {
+                    backdrop.classList.add('hidden');
+                }, 300); // Match transition duration
+            }
+        }
+    </script>
+</body>
+
+</html>
