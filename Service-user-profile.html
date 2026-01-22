@@ -47,6 +47,43 @@
             },
         }
     </script>
+    </script>
+    <style type="text/tailwindcss">
+        .sidebar-rail-item {
+            @apply flex flex-col items-center justify-center py-3 px-1 text-center transition-all duration-200 hover:bg-blue-50 text-slate-600;
+        }
+        .sidebar-rail-item.active {
+            @apply text-primary bg-blue-50 border-r-4 border-primary;
+        }
+        .sidebar-rail-item span.material-symbols-outlined {
+            @apply text-[24px] mb-1;
+        }
+        .sidebar-rail-item p {
+            @apply text-[10px] font-medium leading-tight px-1;
+        }
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: transparent;
+            border-radius: 4px;
+        }
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+        }
+        /* Firefox */
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
+        }
+        .custom-scrollbar:hover {
+            scrollbar-color: #cbd5e1 transparent;
+        }
+    </style>
     <link rel="stylesheet" href="style.css" />
 
 
@@ -56,82 +93,74 @@
         onclick="toggleSidebar()"></div>
 
     <aside id="sidebar"
-        class="w-24 h-full fixed lg:static inset-y-0 left-0 flex flex-col bg-surface-white border-r border-blue-100 flex-shrink-0 z-50 shadow-[4px_0_24px_rgba(59,130,246,0.03)] transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="p-4 flex flex-col items-center justify-center border-b border-blue-50/50">
-            <div
-                class="bg-gradient-to-br from-primary to-primary-dark aspect-square rounded-xl size-10 flex items-center justify-center shadow-lg shadow-blue-500/30 mb-2">
-                <span class="material-symbols-outlined text-white">medical_services</span>
+        class="w-24 h-full fixed lg:static inset-y-0 left-0 flex flex-col bg-white border-r border-slate-100 flex-shrink-0 z-50 shadow-sm transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto custom-scrollbar">
+        <div class="p-4 flex justify-center border-b border-gray-100 mb-2">
+            <div class="size-10 text-primary">
+                <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z">
+                    </path>
+                </svg>
             </div>
         </div>
-        <nav class="flex-1 px-4 flex flex-col gap-1 overflow-y-auto pt-2 pb-6">
-            <div class="px-3 mb-2 mt-2 flex justify-center">
-                <div class="h-0.5 w-8 bg-blue-100/50 rounded-full"></div>
-            </div>
-            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
-                href="#">
-                <span
-                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">edit_note</span>
-                <span class="text-[10px] font-bold">Records</span>
+        <nav class="flex flex-col flex-1">
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">account_circle</span>
+                <p>My Account</p>
             </a>
-            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
-                href="#">
-                <span
-                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">assignment_turned_in</span>
-                <span class="text-[10px] font-bold">Assess</span>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">badge</span>
+                <p>Staff</p>
             </a>
-            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
-                href="#">
-                <span
-                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">medication</span>
-                <span class="text-[10px] font-bold">Meds</span>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">person_add</span>
+                <p>Service User</p>
             </a>
-            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
-                href="#">
-                <span
-                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">security</span>
-                <span class="text-[10px] font-bold">Risk</span>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">handshake</span>
+                <p>Handover</p>
             </a>
-            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl bg-primary-light text-primary border border-blue-100 shadow-sm transition-all group"
-                href="#">
-                <span class="material-symbols-outlined text-[24px] text-primary fill-1">medical_information</span>
-                <span class="text-[10px] font-bold">Plan</span>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">assignment</span>
+                <p>Daily Plan</p>
             </a>
-            <div class="px-3 mb-1 mt-2 flex justify-center">
-                <div class="h-0.5 w-8 bg-blue-100/50 rounded-full"></div>
-            </div>
-            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
-                href="#">
-                <span
-                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">account_balance_wallet</span>
-                <span class="text-[10px] font-bold">Finance</span>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">calendar_month</span>
+                <p>Calendar</p>
             </a>
-            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
-                href="#">
-                <span
-                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">calendar_month</span>
-                <span class="text-[10px] font-bold">Schedule</span>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">checklist</span>
+                <p>To Do</p>
             </a>
-            <a class="flex flex-col items-center justify-center gap-1.5 px-2 py-2 mx-2 rounded-xl text-text-secondary hover:bg-primary-light hover:text-primary transition-all group"
-                href="#">
-                <span
-                    class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition-colors">contacts</span>
-                <span class="text-[10px] font-bold">Contacts</span>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">schedule</span>
+                <p>Rota</p>
+            </a>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">payments</span>
+                <p>Finance</p>
+            </a>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">contact_page</span>
+                <p>Contacts</p>
+            </a>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">restaurant_menu</span>
+                <p>Food Menu</p>
+            </a>
+            <a class="sidebar-rail-item" href="#">
+                <span class="material-symbols-outlined">folder_open</span>
+                <p>File Manager</p>
+            </a>
+            <a class="sidebar-rail-item active" href="#">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">analytics</span>
+                <p>Reports</p>
+            </a>
+            <a class="sidebar-rail-item mt-auto mb-4" href="#">
+                <span class="material-symbols-outlined">settings</span>
+                <p>Settings</p>
             </a>
         </nav>
-        <div class="p-2 border-t border-blue-100 mt-auto bg-gradient-to-b from-white to-blue-50/30 flex flex-col gap-2">
-            <div class="bg-white rounded-xl p-2 border border-blue-100 shadow-sm flex items-center justify-center"
-                title="On Duty - Day Shift">
-                <span class="relative flex h-2.5 w-2.5">
-                    <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                </span>
-            </div>
-            <a class="flex flex-col items-center justify-center p-2 text-text-secondary hover:text-primary transition-colors rounded-lg hover:bg-primary-light/50"
-                href="#" title="Logout">
-                <span class="material-symbols-outlined">logout</span>
-            </a>
-        </div>
     </aside>
     <main class="flex-1 flex flex-col h-full overflow-hidden relative bg-background-warm">
         <header
