@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Timesheet Reports Management - CareOrg</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f8f9fa",
+                        "background-dark": "#101922",
+                        "sidebar-bg": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-rail-item {
+            @apply flex flex-col items-center justify-center py-3 px-1 text-center transition-all duration-200 hover:bg-blue-50 text-slate-600;
+        }
+        .sidebar-rail-item.active {
+            @apply text-primary bg-blue-50 border-r-4 border-primary;
+        }
+        .sidebar-rail-item span.material-symbols-outlined {
+            @apply text-[24px] mb-1;
+        }
+        .sidebar-rail-item p {
+            @apply text-[10px] font-medium leading-tight px-1;
+        }
+        
+        /* Custom Scrollbar for Sidebar */
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background-color: transparent;
+            border-radius: 4px;
+        }
+        .sidebar-scroll:hover::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1; /* slate-300 */
+        }
+        /* Firefox */
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
+        }
+        .sidebar-scroll:hover {
+            scrollbar-color: #cbd5e1 transparent;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-[#111418] dark:text-gray-100">
+    <div class="flex flex-col h-screen overflow-hidden">
+        <header
+            class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 bg-white px-6 py-3 z-50 flex-shrink-0 relative">
+            <div class="flex items-center gap-4 md:gap-6">
+                <button onclick="toggleSidebar()"
+                    class="lg:hidden p-2 -ml-2 text-slate-500 hover:bg-gray-100 rounded-lg transition-colors">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <div class="h-10">
+                    <img src="assets/logo.png" alt="Logo" class="h-full w-auto object-contain" />
+                </div>
+                <!-- Top Search Bar -->
+                <!-- Top Search Bar Removed from here -->
+            </div>
+            <!-- Central Search Bar -->
+            <div class="hidden lg:flex flex-1 max-w-4xl mx-8">
+                <div class="relative w-full">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[22px]">search</span>
+                    <input
+                        class="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-sm"
+                        type="text" placeholder="Search..." />
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Mobile/Tablet Search Toggle -->
+                <button onclick="toggleSearch()"
+                    class="lg:hidden flex items-center justify-center rounded-lg h-9 w-9 text-slate-500 hover:bg-gray-100 transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">search</span>
+                </button>
+                <div class="relative">
+                    <button onclick="toggleNotifications()"
+                        class="flex items-center justify-center rounded-lg h-9 w-9 bg-gray-50 text-gray-500 hover:bg-gray-100 transition-colors relative">
+                        <span class="material-symbols-outlined text-[20px]">notifications</span>
+                        <span
+                            class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                    <!-- Notification Dropdown -->
+                    <div id="notification-dropdown"
+                        class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-xl shadow-slate-200/50 border border-gray-100 overflow-hidden z-50">
+                        <div class="p-4 border-b border-gray-50 flex justify-between items-center">
+                            <h3 class="font-bold text-slate-800 text-sm">Notifications</h3>
+                            <button class="text-[10px] font-bold text-primary hover:text-blue-700">Mark all
+                                read</button>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto">
+                            <a href="#"
+                                class="flex gap-3 p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
+                                <div
+                                    class="size-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+                                    <span class="material-symbols-outlined text-[16px]">description</span>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-700">New Assessment Assigned</p>
+                                    <p class="text-[10px] text-slate-500 mt-0.5 line-clamp-1">Arthur Morgan's care needs
+                                        assessment is pending.</p>
+                                    <p class="text-[9px] text-slate-400 mt-1">2 mins ago</p>
+                                </div>
+                            </a>
+                            <a href="#"
+                                class="flex gap-3 p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
+                                <div
+                                    class="size-8 rounded-full bg-orange-50 flex items-center justify-center text-orange-600 flex-shrink-0">
+                                    <span class="material-symbols-outlined text-[16px]">warning</span>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-700">Urgent Review</p>
+                                    <p class="text-[10px] text-slate-500 mt-0.5 line-clamp-1">Safety report for Ward B
+                                        requires attention.</p>
+                                    <p class="text-[9px] text-slate-400 mt-1">1 hour ago</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="p-2 border-t border-gray-50 bg-gray-50/50 text-center">
+                            <a href="#" class="text-[10px] font-bold text-slate-500 hover:text-primary">View all
+                                notifications</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative ml-4 pl-4 border-l border-gray-200">
+                    <button onclick="toggleProfile()"
+                        class="flex items-center gap-3 hover:bg-gray-50 rounded-lg p-1 transition-colors text-left group">
+                        <div class="text-right hidden md:block">
+                            <p class="text-xs font-bold text-slate-800 group-hover:text-primary transition-colors">Admin
+                                User</p>
+                            <p class="text-[10px] text-slate-500">Super Admin</p>
+                        </div>
+                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 border border-gray-200 shadow-sm"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD1NXRekEWqYXxfohIUbr5fE6FhrGBsXOQHQM23H83Vq-GWUG4HL1veMRZRHYISLh8OBrfUWwn6G8DsUNXCyvwfRbEGpDhwMpEgEM6_4sMEPaZ7qlfYCO-eiFBYOYif0S-ckZzTBZEV_MkYv8LEADj6XbHMaWYCBa33-w8HhFRlq9N0QcpONj69BjVzt9tYnIUaf6wiC-Rfy0nzhkmt_vK6yzDpkP29QBxHN_34-x9yQAVkb7yfk_2iabSGPOje4G2-iSGXqFCaxw4k");'>
+                        </div>
+                    </button>
+                    <!-- Profile Dropdown -->
+                    <div id="profile-dropdown"
+                        class="hidden absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl shadow-slate-200/50 border border-gray-100 overflow-hidden z-50">
+                        <div class="p-4 border-b border-gray-50 md:hidden">
+                            <p class="text-xs font-bold text-slate-800">Admin User</p>
+                            <p class="text-[10px] text-slate-500">Super Admin</p>
+                        </div>
+                        <div class="py-1">
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-gray-50 hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-[16px]">person</span>
+                                My Profile
+                            </a>
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-gray-50 hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-[16px]">settings</span>
+                                Settings
+                            </a>
+                            <div class="border-t border-gray-50 my-1"></div>
+                            <a href="#"
+                                class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 transition-colors">
+                                <span class="material-symbols-outlined text-[16px]">logout</span>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Collapsible Search for Mobile/Tablet -->
+        <div id="mobile-search-bar"
+            class="hidden lg:hidden bg-white border-b border-gray-200 p-4 animate-in slide-in-from-top-2 duration-200">
+            <div class="relative w-full">
+                <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
+                <input
+                    class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                    type="text" placeholder="Search..." autofocus />
+            </div>
+        </div>
+        <div class="flex flex-1 overflow-hidden relative group" id="sidebar-container">
+            <aside id="sidebar"
+                class="fixed top-[65px] h-[calc(100vh-65px)] left-0 z-40 md:static md:top-0 md:h-auto w-20 lg:w-24 group-[.tablet-expanded]:!w-24 bg-white border-r border-gray-200 flex flex-col overflow-y-auto sidebar-scroll transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out shadow-xl md:shadow-none">
+                <nav class="flex flex-col flex-1 pt-2">
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">account_circle</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">My Account</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">badge</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Staff</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">person_add</span>
+                        <p
+                            class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block text-center leading-tight">
+                            Service User</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">handshake</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Handover</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">assignment</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Daily Plan</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Calendar</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">description</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Assessments</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">schedule</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Rota</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">payments</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Finance</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">contact_page</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Contacts</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">restaurant_menu</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Food Menu</p>
+                    </a>
+                    <a class="sidebar-rail-item" href="#">
+                        <span class="material-symbols-outlined">folder_open</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block font-medium">File
+                            Manager</p>
+                    </a>
+                    <a class="sidebar-rail-item active" href="#">
+                        <span class="material-symbols-outlined"
+                            style="font-variation-settings: 'FILL' 1">analytics</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Reports</p>
+                    </a>
+                    <a class="sidebar-rail-item mt-auto mb-4" href="#">
+                        <span class="material-symbols-outlined">settings</span>
+                        <p class="text-[10px] md:hidden lg:block group-[.tablet-expanded]:block">Settings</p>
+                    </a>
+                </nav>
+            </aside>
+            <main class="flex-1 overflow-y-auto p-8 bg-background-light">
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <a class="text-slate-400 text-sm font-medium hover:underline" href="#">Home</a>
+                    <span class="text-slate-400 text-sm font-medium">/</span>
+                    <a class="text-slate-400 text-sm font-medium hover:underline" href="#">Reports</a>
+                    <span class="text-slate-400 text-sm font-medium">/</span>
+                    <span class="text-primary text-sm font-medium">Timesheet Reports</span>
+                </div>
+                <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+                    <h1 class="text-slate-900 text-3xl font-black tracking-tight">Timesheet Reports</h1>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8 overflow-hidden transition-all duration-300 ease-in-out"
+                    id="filter-container">
+                    <!-- Collapsible Header -->
+                    <div class="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+                        onclick="toggleFilter()">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">filter_list</span>
+                            <h2 class="text-lg font-bold text-slate-800">Filter Options</h2>
+                        </div>
+                        <span id="filter-icon"
+                            class="material-symbols-outlined text-slate-500 transition-transform duration-300">expand_less</span>
+                    </div>
+
+                    <!-- Collapsible Content -->
+                    <div id="filter-content" class="transition-all duration-300 ease-in-out origin-top">
+                        <div class="p-6 pt-0 border-t border-gray-100">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 pt-4">
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Start
+                                        Date</label>
+                                    <div class="relative">
+                                        <span
+                                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">calendar_today</span>
+                                        <input
+                                            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border-gray-200 border rounded-lg text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                            type="date" />
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">End
+                                        Date</label>
+                                    <div class="relative">
+                                        <span
+                                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">calendar_today</span>
+                                        <input
+                                            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border-gray-200 border rounded-lg text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                            type="date" />
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Staff
+                                        Member</label>
+                                    <div class="relative custom-dropdown" id="dropdown-staff">
+                                        <button type="button" onclick="toggleDropdown('dropdown-staff')"
+                                            class="dropdown-trigger w-full pl-4 pr-4 py-2.5 bg-gray-50 border-gray-200 border rounded-lg text-sm text-slate-700 text-left focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all flex items-center justify-between">
+                                            <span class="selected-text">All Staff</span>
+                                            <span
+                                                class="material-symbols-outlined text-[20px] text-gray-500 transition-transform duration-200">expand_more</span>
+                                        </button>
+                                        <div
+                                            class="dropdown-menu hidden absolute z-20 top-full left-0 right-0 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+                                            <div class="p-2 border-b border-gray-50 sticky top-0 bg-white">
+                                                <input type="text" placeholder="Search..." onkeyup="filterOptions(this)"
+                                                    class="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded text-xs focus:outline-none focus:border-primary text-slate-700">
+                                            </div>
+                                            <div class="options-list max-h-48 overflow-y-auto">
+                                                <div onclick="selectOption('dropdown-staff', 'All Staff')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    All Staff</div>
+                                                <div onclick="selectOption('dropdown-staff', 'Arthur Morgan')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Arthur Morgan</div>
+                                                <div onclick="selectOption('dropdown-staff', 'John Marston')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    John Marston</div>
+                                                <div onclick="selectOption('dropdown-staff', 'Dutch van der Linde')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Dutch van der Linde</div>
+                                                <div onclick="selectOption('dropdown-staff', 'Sadie Adler')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Sadie Adler</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <label
+                                        class="text-xs font-bold text-slate-500 uppercase tracking-wide">Status</label>
+                                    <div class="relative custom-dropdown" id="dropdown-status">
+                                        <button type="button" onclick="toggleDropdown('dropdown-status')"
+                                            class="dropdown-trigger w-full pl-4 pr-4 py-2.5 bg-gray-50 border-gray-200 border rounded-lg text-sm text-slate-700 text-left focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all flex items-center justify-between">
+                                            <span class="selected-text">All Statuses</span>
+                                            <span
+                                                class="material-symbols-outlined text-[20px] text-gray-500 transition-transform duration-200">expand_more</span>
+                                        </button>
+                                        <div
+                                            class="dropdown-menu hidden absolute z-20 top-full left-0 right-0 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+                                            <div class="p-2 border-b border-gray-50 sticky top-0 bg-white">
+                                                <input type="text" placeholder="Search..." onkeyup="filterOptions(this)"
+                                                    class="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded text-xs focus:outline-none focus:border-primary text-slate-700">
+                                            </div>
+                                            <div class="options-list max-h-48 overflow-y-auto">
+                                                <div onclick="selectOption('dropdown-status', 'All Statuses')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    All Statuses</div>
+                                                <div onclick="selectOption('dropdown-status', 'Approved')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Approved</div>
+                                                <div onclick="selectOption('dropdown-status', 'Sick Leave')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Sick Leave</div>
+                                                <div onclick="selectOption('dropdown-status', 'Annual Leave')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Annual Leave</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Shift
+                                        Type</label>
+                                    <div class="relative custom-dropdown" id="dropdown-shift">
+                                        <button type="button" onclick="toggleDropdown('dropdown-shift')"
+                                            class="dropdown-trigger w-full pl-4 pr-4 py-2.5 bg-gray-50 border-gray-200 border rounded-lg text-sm text-slate-700 text-left focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all flex items-center justify-between">
+                                            <span class="selected-text">All Shifts</span>
+                                            <span
+                                                class="material-symbols-outlined text-[20px] text-gray-500 transition-transform duration-200">expand_more</span>
+                                        </button>
+                                        <div
+                                            class="dropdown-menu hidden absolute z-20 top-full left-0 right-0 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+                                            <div class="p-2 border-b border-gray-50 sticky top-0 bg-white">
+                                                <input type="text" placeholder="Search..." onkeyup="filterOptions(this)"
+                                                    class="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded text-xs focus:outline-none focus:border-primary text-slate-700">
+                                            </div>
+                                            <div class="options-list max-h-48 overflow-y-auto">
+                                                <div onclick="selectOption('dropdown-shift', 'All Shifts')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    All Shifts</div>
+                                                <div onclick="selectOption('dropdown-shift', 'Evening 2-8')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Evening 2-8</div>
+                                                <div onclick="selectOption('dropdown-shift', 'Long Day 8-8')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Long Day 8-8</div>
+                                                <div onclick="selectOption('dropdown-shift', 'Night')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Night</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Week
+                                        Day</label>
+                                    <div class="relative custom-dropdown" id="dropdown-day">
+                                        <button type="button" onclick="toggleDropdown('dropdown-day')"
+                                            class="dropdown-trigger w-full pl-4 pr-4 py-2.5 bg-gray-50 border-gray-200 border rounded-lg text-sm text-slate-700 text-left focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all flex items-center justify-between">
+                                            <span class="selected-text">All Days</span>
+                                            <span
+                                                class="material-symbols-outlined text-[20px] text-gray-500 transition-transform duration-200">expand_more</span>
+                                        </button>
+                                        <div
+                                            class="dropdown-menu hidden absolute z-20 top-full left-0 right-0 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+                                            <div class="p-2 border-b border-gray-50 sticky top-0 bg-white">
+                                                <input type="text" placeholder="Search..." onkeyup="filterOptions(this)"
+                                                    class="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded text-xs focus:outline-none focus:border-primary text-slate-700">
+                                            </div>
+                                            <div class="options-list max-h-48 overflow-y-auto">
+                                                <div onclick="selectOption('dropdown-day', 'All Days')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    All Days</div>
+                                                <div onclick="selectOption('dropdown-day', 'Monday')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Monday</div>
+                                                <div onclick="selectOption('dropdown-day', 'Tuesday')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Tuesday</div>
+                                                <div onclick="selectOption('dropdown-day', 'Wednesday')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Wednesday</div>
+                                                <div onclick="selectOption('dropdown-day', 'Thursday')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Thursday</div>
+                                                <div onclick="selectOption('dropdown-day', 'Friday')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Friday</div>
+                                                <div onclick="selectOption('dropdown-day', 'Saturday')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Saturday</div>
+                                                <div onclick="selectOption('dropdown-day', 'Sunday')"
+                                                    class="px-4 py-2 hover:bg-gray-50 text-sm cursor-pointer text-slate-700 transition-colors">
+                                                    Sunday</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-3 pt-2 justify-end">
+                                <button
+                                    class="px-5 py-2.5 rounded-lg border border-gray-200 text-slate-600 font-medium hover:bg-gray-50 transition-colors text-sm">
+                                    Cancel
+                                </button>
+                                <button
+                                    class="px-5 py-2.5 rounded-lg border border-primary text-primary font-medium hover:bg-blue-50 transition-colors text-sm flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">print</span>
+                                    Print
+                                </button>
+                                <button
+                                    class="px-6 py-2.5 rounded-lg bg-primary text-white font-medium hover:bg-blue-600 shadow-md shadow-blue-100 transition-all text-sm flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                    View Reports
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 border-b border-gray-200">
+                                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Date
+                                    </th>
+                                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Week
+                                        Day</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                        Staff</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                        Shift</th>
+                                    <th
+                                        class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">
+                                        Billable Hours</th>
+                                    <th
+                                        class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">
+                                        Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr class="hover:bg-blue-50/30 transition-colors group">
+                                    <td class="px-6 py-4 text-sm font-medium text-slate-700">Oct 24, 2024</td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Thursday</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="size-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold">
+                                                SJ</div>
+                                            <span class="text-sm font-medium text-slate-900">Sarah Jenkins</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Long Day (8-8)</td>
+                                    <td class="px-6 py-4 text-sm font-bold text-slate-800 text-center">12.0</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                                            Approved
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-blue-50/30 transition-colors group">
+                                    <td class="px-6 py-4 text-sm font-medium text-slate-700">Oct 24, 2024</td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Thursday</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="size-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">
+                                                MR</div>
+                                            <span class="text-sm font-medium text-slate-900">Mike Ross</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Evening (2-8)</td>
+                                    <td class="px-6 py-4 text-sm font-bold text-slate-800 text-center">6.0</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                                            Approved
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-blue-50/30 transition-colors group">
+                                    <td class="px-6 py-4 text-sm font-medium text-slate-700">Oct 23, 2024</td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Wednesday</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="size-8 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center text-xs font-bold">
+                                                JP</div>
+                                            <span class="text-sm font-medium text-slate-900">Jessica Pearson</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">N/A</td>
+                                    <td class="px-6 py-4 text-sm font-bold text-slate-800 text-center">0.0</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100">
+                                            <span class="size-1.5 rounded-full bg-red-500"></span>
+                                            Sick Leave
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-blue-50/30 transition-colors group">
+                                    <td class="px-6 py-4 text-sm font-medium text-slate-700">Oct 23, 2024</td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Wednesday</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="size-8 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xs font-bold">
+                                                HS</div>
+                                            <span class="text-sm font-medium text-slate-900">Harvey Specter</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Night</td>
+                                    <td class="px-6 py-4 text-sm font-bold text-slate-800 text-center">10.0</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                                            Approved
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-blue-50/30 transition-colors group">
+                                    <td class="px-6 py-4 text-sm font-medium text-slate-700">Oct 22, 2024</td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Tuesday</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="size-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold">
+                                                SJ</div>
+                                            <span class="text-sm font-medium text-slate-900">Sarah Jenkins</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">N/A</td>
+                                    <td class="px-6 py-4 text-sm font-bold text-slate-800 text-center">0.0</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100">
+                                            <span class="size-1.5 rounded-full bg-amber-500"></span>
+                                            Annual Leave
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
+                        <p class="text-xs text-slate-500 font-medium">Showing 5 of 48 records</p>
+                        <div class="flex gap-1.5">
+                            <button
+                                class="size-8 rounded-lg flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-slate-600 hover:bg-gray-50 transition-colors">
+                                <span class="material-symbols-outlined text-[16px]">chevron_left</span>
+                            </button>
+                            <button
+                                class="size-8 rounded-lg flex items-center justify-center text-xs font-medium border border-primary bg-primary text-white shadow-sm">1</button>
+                            <button
+                                class="size-8 rounded-lg flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-slate-600 hover:bg-gray-50 transition-colors">2</button>
+                            <button
+                                class="size-8 rounded-lg flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-slate-600 hover:bg-gray-50 transition-colors">3</button>
+                            <span class="size-8 flex items-center justify-center text-xs text-slate-400">...</span>
+                            <button
+                                class="size-8 rounded-lg flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-slate-600 hover:bg-gray-50 transition-colors">10</button>
+                            <button
+                                class="size-8 rounded-lg flex items-center justify-center text-xs font-medium border border-gray-200 bg-white text-slate-600 hover:bg-gray-50 transition-colors">
+                                <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    </main>
+    </div>
+    <div id="mobile-overlay" onclick="toggleSidebar()"
+        class="fixed top-[65px] left-0 right-0 bottom-0 bg-slate-900/50 z-30 hidden md:hidden transition-opacity"></div>
+    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            const container = document.getElementById('sidebar-container');
+            const isMobile = window.innerWidth < 768; // Tailwind md breakpoint
+
+            if (isMobile) {
+                if (sidebar.classList.contains('-translate-x-full')) {
+                    // Open Drawer
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.remove('hidden');
+                } else {
+                    // Close Drawer
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                }
+            } else {
+                // Tablet Expansion Toggle
+                container.classList.toggle('tablet-expanded');
+            }
+        }
+
+        function toggleSearch() {
+            const searchBar = document.getElementById('mobile-search-bar');
+            searchBar.classList.toggle('hidden');
+            if (!searchBar.classList.contains('hidden')) {
+                searchBar.querySelector('input').focus();
+            }
+        }
+
+        function toggleFilter() {
+            const content = document.getElementById('filter-content');
+            const icon = document.getElementById('filter-icon');
+
+            if (content.style.maxHeight === '0px') {
+                // Expand
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(0deg)';
+
+                // Remove max-height after transition to allow responsiveness
+                setTimeout(() => {
+                    content.style.maxHeight = null;
+                }, 300);
+            } else {
+                // Collapse
+                // Set explicit height first for transition
+                content.style.maxHeight = content.scrollHeight + 'px';
+                // Force reflow
+                content.offsetHeight;
+                content.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notification-dropdown');
+            const profileDropdown = document.getElementById('profile-dropdown');
+
+            // Close other dropdowns
+            if (!profileDropdown.classList.contains('hidden')) {
+                profileDropdown.classList.add('hidden');
+            }
+
+            dropdown.classList.toggle('hidden');
+        }
+
+        function toggleProfile() {
+            const dropdown = document.getElementById('profile-dropdown');
+            const notifDropdown = document.getElementById('notification-dropdown');
+
+            // Close other dropdowns
+            if (!notifDropdown.classList.contains('hidden')) {
+                notifDropdown.classList.add('hidden');
+            }
+
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (event) {
+            const notifDropdown = document.getElementById('notification-dropdown');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const notifButton = event.target.closest('button[onclick="toggleNotifications()"]');
+            const profileButton = event.target.closest('button[onclick="toggleProfile()"]');
+
+            // Notification & Profile Outside Click
+            if (!notifButton && notifDropdown && !notifDropdown.classList.contains('hidden') && !event.target.closest('#notification-dropdown')) {
+                notifDropdown.classList.add('hidden');
+            }
+
+            if (!profileButton && profileDropdown && !profileDropdown.classList.contains('hidden') && !event.target.closest('#profile-dropdown')) {
+                profileDropdown.classList.add('hidden');
+            }
+
+            // Custom Dropdowns Logic
+            if (!event.target.closest('.custom-dropdown')) {
+                document.querySelectorAll('.custom-dropdown').forEach(d => {
+                    const menu = d.querySelector('.dropdown-menu');
+                    if (menu && !menu.classList.contains('hidden')) {
+                        menu.classList.add('hidden');
+                        d.querySelector('.material-symbols-outlined').style.transform = 'rotate(0deg)';
+                    }
+                });
+            }
+        });
+
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const menu = dropdown.querySelector('.dropdown-menu');
+            const icon = dropdown.querySelector('.material-symbols-outlined');
+
+            // Close other dropdowns
+            document.querySelectorAll('.custom-dropdown').forEach(d => {
+                if (d.id !== id) {
+                    d.querySelector('.dropdown-menu').classList.add('hidden');
+                    d.querySelector('.material-symbols-outlined').style.transform = 'rotate(0deg)';
+                }
+            });
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+                // Focus search input
+                setTimeout(() => menu.querySelector('input').focus(), 100);
+            } else {
+                menu.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function selectOption(dropdownId, value) {
+            const dropdown = document.getElementById(dropdownId);
+            const textSpan = dropdown.querySelector('.selected-text');
+            const menu = dropdown.querySelector('.dropdown-menu');
+            const icon = dropdown.querySelector('.material-symbols-outlined');
+
+            textSpan.textContent = value;
+            menu.classList.add('hidden');
+            icon.style.transform = 'rotate(0deg)';
+        }
+
+        function filterOptions(input) {
+            const filter = input.value.toLowerCase();
+            const options = input.closest('.dropdown-menu').querySelectorAll('.options-list div');
+
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
